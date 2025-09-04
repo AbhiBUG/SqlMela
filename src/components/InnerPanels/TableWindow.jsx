@@ -22,16 +22,16 @@ export default function TableWindow({ tableName }) {
   }, [tableName]);
 
   return (
-    <div className="border rounded-xl p-4 shadow bg-white">
+    <div className="border rounded-xl p-4 shadow bg-black">
       <h2 className="font-bold text-lg mb-4">Table: {tableName}</h2>
 
       {loading && <p>Loading table data...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
 
       {!loading && !error && rows.length > 0 && (
-        <table className="table-auto w-full border-collapse border border-gray-300">
+        <table className="table-auto w-full border-collapse border border-gray-300 text-white">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-gray-200 text-black">
               {Object.keys(rows[0]).map((col) => (
                 <th key={col} className="border border-gray-300 px-4 py-2 text-left">
                   {col}

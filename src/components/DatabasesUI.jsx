@@ -47,7 +47,7 @@ const navigate = useNavigate();
   return (
     <div>
         {/* <div className="grid grid-cols-3 gap-4 p-6 border-2 shadow-xl"> */}
-        <div className="flex flex-col items-center justify-center p-6 shadow-xl gap-3">
+        <div className="flex flex-col items-center justify-center p-6 shadow-xl gap-3  h-screen">
             {Databases.map((database,key)=>(
               <div className="flex flex-col items-center justify-center shadow-xl text-xl font-bold bg-orange-50 hover:bg-orange-400 hover:text-white cursor-pointer rounded-xl h-[100px] w-[300px] active:bg-blue-400"
               key = {key}

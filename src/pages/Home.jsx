@@ -30,7 +30,7 @@ const Home = () => {
                        
                     </ul>
 
-                    <div className="bg-orange-100 w-screen h-screen">
+                    <div className="bg-orange-100 w-screen">
                           
                             <div>
                             {tabsContent[value]}

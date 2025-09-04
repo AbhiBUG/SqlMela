@@ -16,7 +16,7 @@ export default function Tables() {
             <Link
               to={`/home/${dbName}/${t.name}`}
               className="text-orange-400 "
-            >            <div className="bg-white flex flex-row p-5 m-3 rounded-lg border-2 border-gray-600 hover:bg-blue-100 active:bg-blue-400 text-xl font-bold">
+            >            <div className="bg-white flex flex-col p-5 m-3 rounded-lg border-2 border-gray-600 hover:bg-blue-100 active:bg-blue-400 text-xl font-bold">
 
               {t.name}
                </div>

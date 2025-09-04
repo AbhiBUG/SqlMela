@@ -1,40 +1,84 @@
-import { React, useState } from 'react'
-import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
-import './index.css'
-import BG from './assets/bg.jpg'
-import NavBar from './components/navbar.jsx'
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
+import "./index.css";
+import BG from "./assets/bg.jpg";
+import NavBar from "./components/navbar.jsx";
 import Home from "./pages/Home.jsx";
-import Login from "./pages/login.jsx";
+import Login from "./pages/login.jsx";S
+import Tables from "./pages/Tables.jsx";
+import TablePage from "./pages/TablePage.jsx";
 
-import Tables from './pages/Tables.jsx'
-import TablePage from './pages/TablePage.jsx'
+const ProtectedRoute = ({ user, children }) => {
+  return user ? children : <Navigate to="/" replace />;
+};
+
 const App = () => {
-
   const [username, setUsername] = useState("");
 
-  return (
-    <>
-    
-      <NavBar  user={username}/>
-      <div>Hello</div> 
-      <div style={{ backgroundImage: `url(${BG})` }} className="h-screen bg-cover bg-no-repeat">
-        
-        <Router>
-         <Routes>
-            <Route path="/" element={<Login setName={setUsername}/>}></Route>
-            <Route path="/home" element={<Home/>}></Route>
-            <Route path="/home/:dbName/" element={<Tables/>}></Route>
-            <Route path="/home/:dbName/:tableName" element={<TablePage />} />
-            {/* <Route path="/home/librarydb" element={<LibraryDB/>}></Route>
-            <Route path="/home/schooldb" element={<SchoolDB/>}></Route>
-            <Route path="/home/officedb" element={<OfficeDB/>}></Route> */}
-            </Routes>
-        </Router>
-      
-     
-      </div>
-    </>
-  )
-}
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUsername(JSON.parse(storedUser).username);
+    }
+  }, []);
 
-export default App
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUsername("");
+  };
+
+  return (
+    <Router>
+      <NavBar user={username || "Guest"} onLogout={handleLogout} />
+
+      <div
+        style={{ backgroundImage: `url(${BG})` }}
+        className="min-h-screen bg-cover bg-no-repeat flex flex-col relative"
+      >
+        {/* overlay for readability */}
+        <div className="absolute inset-0 bg-black/30"></div>
+
+        <main className="flex-1 pt-16 px-4 md:px-8 relative z-10">
+          <Routes>
+            <Route path="/" element={<Login setName={setUsername} />} />
+
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute user={username}>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/home/:dbName"
+              element={
+                <ProtectedRoute user={username}>
+                  <Tables />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/home/:dbName/:tableName"
+              element={
+                <ProtectedRoute user={username}>
+                  <TablePage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+      </div>
+    </Router>
+  );
+};
+
+export default App;

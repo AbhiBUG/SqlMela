@@ -13,7 +13,7 @@ export default function TablePage() {
   const tableGames = games.filter((g) => g.table === tableName);
 
   return (
-    <div className="grid grid-cols-2 gap-4 p-6 h-screen bg-orange-100">
+    <div className="grid grid-cols-2 gap-4 pt-[30px] h-screen bg-black">
       <div className="col-span-1  ">
         <QueryResult tableName={tableName} />
         <TableWindow tableName={tableName} />
