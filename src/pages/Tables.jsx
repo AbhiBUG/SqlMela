@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import tables from "../data/tables.json";
-import { Xwrapper, Xarrow } from "react-xarrows";
+
 
 export default function Tables() {
   const { dbName } = useParams();
