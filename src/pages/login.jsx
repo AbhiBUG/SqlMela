@@ -28,7 +28,7 @@ const Login = ({setName}) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("https://localhost:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -57,7 +57,7 @@ const Login = ({setName}) => {
       <div className="flex flex-col items-center justify-center  h-screen">
           <div className="flex flex-col items-center justify-center">
 
-            <form  onSubmit={handleSubmit} className=" bg-white rounded-2 p-5 shadow-xl">
+            <form  onSubmit={handleSubmit} className=" bg-white rounded-xl p-5 shadow-xl">
               <div className="flex flex-col gap-1">
                 select
                         <input type="text" 
@@ -76,7 +76,7 @@ const Login = ({setName}) => {
                             onChange={(e)=>setPassword(e.target.value)}
                             ></input>{state ? (<LuEye onClick={() => set()} />) : (<LuEyeClosed onClick={() => set()} />)}
                         </div>
-                <button type="submit"  className="bg-orange-100 rounded-xl border-2 border-orange-600 text-white bg-orange-500">execute query</button>
+                <button type="submit"  className=" rounded-xl border-2 border-orange-600 text-white bg-orange-500 hover:bg-blue-200 active:bg-blue-400">execute query</button>
               </div>
             </form>
 

@@ -11,7 +11,7 @@ export default function TableWindow({ tableName }) {
     setLoading(true);
     setError(null);
 
-    fetch(`http://localhost:5000/api/table/${tableName}`)
+    fetch(`https://sqlmelabackend.onrender.com/api/table/${tableName}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch table data");
         return res.json();
