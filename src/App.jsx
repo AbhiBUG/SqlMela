@@ -10,7 +10,7 @@ import "./index.css";
 import BG from "./assets/bg.jpg";
 import NavBar from "./components/navbar.jsx";
 import Home from "./pages/Home.jsx";
-import Login from "./pages/login.jsx";S
+import Login from "./pages/login.jsx";
 import Tables from "./pages/Tables.jsx";
 import TablePage from "./pages/TablePage.jsx";
 
@@ -42,7 +42,7 @@ const App = () => {
         className="min-h-screen bg-cover bg-no-repeat flex flex-col relative"
       >
         {/* overlay for readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute "></div>
 
         <main className="flex-1 pt-16 px-4 md:px-8 relative z-10">
           <Routes>
