@@ -1,0 +1,38 @@
+[
+  {
+    "db": "schooldb",
+    "name": "students"
+  },
+  {
+    "db": "schooldb",
+    "name": "teachers"
+  },
+  {
+    "db": "schooldb",
+    "name": "classes"
+  },
+  {
+    "db": "officedb",
+    "name": "employees"
+  },
+  {
+    "db": "officedb",
+    "name": "departments"
+  },
+  {
+    "db": "officedb",
+    "name": "projects"
+  },
+  {
+    "db": "librarydb",
+    "name": "books"
+  },
+  {
+    "db": "librarydb",
+    "name": "members"
+  },
+  {
+    "db": "librarydb",
+    "name": "loans"
+  }
+]

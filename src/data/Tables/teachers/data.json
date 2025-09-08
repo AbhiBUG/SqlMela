@@ -1,0 +1,21 @@
+[
+    {
+"game":"Arrangement",
+"qn": 1,
+"arguments":["I love","icecream","eating"],
+"solution":"I love eating icecream"
+    },
+
+    {
+"game":"Arrangement",
+"qn": 2,
+"arguments":["Create","tablename","tablename","table"],
+"solution":"Create table tablename tablename"
+    },
+{
+"game":"Arrangement",
+"qn": 3,
+"arguments":["2","4","6","8"],
+"solution":"8642"
+    }
+]

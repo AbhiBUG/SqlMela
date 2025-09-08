@@ -44,7 +44,7 @@ const App = () => {
         {/* overlay for readability */}
         <div className="absolute "></div>
 
-        <main className="flex-1 pt-16 px-4 md:px-8 relative z-10">
+        <main className="flex-1 pt-16 relative z-10">
           <Routes>
             <Route path="/" element={<Login setName={setUsername} />} />
 

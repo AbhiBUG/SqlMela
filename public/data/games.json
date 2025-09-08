@@ -1,0 +1,30 @@
+[
+  {
+    "tableName": "students",
+    "games": [
+      {
+        "id": "mcq_101",
+        "type": "mcq",
+        "title": "SQL Basics",
+        "dataSource": "/games/students/mcq_101.json"
+      },
+      {
+        "id": "drag_205",
+        "type": "dragdrop",
+        "title": "Arrange Query Steps",
+        "dataSource": "/games/students/drag_205.json"
+      }
+    ]
+  },
+  {
+    "tableName": "employees",
+    "games": [
+      {
+        "id": "mcq_301",
+        "type": "mcq",
+        "title": "Employee Queries",
+        "dataSource": "/games/employees/mcq_301.json"
+      }
+    ]
+  }
+]

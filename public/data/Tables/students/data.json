@@ -1,0 +1,78 @@
+[
+  {
+    "game": "Arrangement",
+    "qn": 1,
+    "arguments": ["you!", "miss", "really", "I"],
+    "solution": "I really miss you!",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "FillContainer",
+    "qn": 2,
+    "arguments": ["You?", "are", "How", "Hi!"],
+    "solution": "Hi! How are You?",
+    "Result":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 3,
+    "arguments": ["2", "4", "6", "8"],
+    "solution": "8642",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 4,
+    "arguments": ["world!", "Hello"],
+    "solution": "Hello world!",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 5,
+    "arguments": ["awesome.", "is", "React"],
+    "solution": "React is awesome.",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 6,
+    "arguments": ["fast.", "is", "JavaScript"],
+    "solution": "JavaScript is fast.",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 7,
+    "arguments": ["learning", "AI", "love", "I"],
+    "solution": "I love learning AI",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 8,
+    "arguments": ["day.", "sunny", "a", "It's"],
+    "solution": "It's a sunny day.",
+    "CorrectResult":"Correct Arrangement",
+    "IncorrectResult":"Wrong Arrangement"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 9,
+    "arguments": ["pizza!", "like", "I"],
+    "solution": "I like pizza!"
+  },
+  {
+    "game": "Arrangement",
+    "qn": 10,
+    "arguments": ["early.", "up", "wake", "I"],
+    "solution": "I wake up early."
+  }
+]
