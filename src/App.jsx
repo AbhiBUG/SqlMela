@@ -51,27 +51,27 @@ const App = () => {
             <Route
               path="/home"
               element={
-                <ProtectedRoute user={username}>
+                // <ProtectedRoute user={username}>
                   <Home />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
 
             <Route
               path="/home/:dbName"
               element={
-                <ProtectedRoute user={username}>
+                // <ProtectedRoute user={username}>
                   <Tables />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
 
             <Route
               path="/home/:dbName/:tableName"
               element={
-                <ProtectedRoute user={username}>
+                // <ProtectedRoute user={username}>
                   <TablePage />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
           </Routes>

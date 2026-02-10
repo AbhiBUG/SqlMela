@@ -1,33 +1,18 @@
 import React from 'react'
 
-const FillContainer = ({argument,solution}) => {
-    //   const [items, setItems] = useState(argument);
-    console.log(argument);
+const FillContainer = ({question,argument,solution}) => {
+console.log(question);
   return (
-    <div className="">
-      
+    <div className=" w-full h-screen text-black">
             
-
-          
-            <div className="flex flex-col border-2  h-screen">
-                {argument.map((option,key)=>{
-                    return(
-                        <div className="bg-white flex flex-row justify-between text-black">
-                    <div
-                    key={key}
-
-                        className="border-2 text-black"
-                    ><h1>{option}</h1> 
-                        </div>
-
-                        <div className="border-2 border-black"
-                        >
-                            {option}
-                        </div>
-                          </div>
-
-                    )} )}
-                    </div>
+            <div className="question">{question}</div>
+            <div className="flex items-center justify-center gap-4">
+            {argument && argument.map((option, key) => (
+              <div key={key} className="bg-gray-200 p-2 rounded-lg">{option}</div>
+            ))}
+              </div>
+              <div>{solution}</div>
+         
       </div>
     
   )

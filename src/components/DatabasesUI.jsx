@@ -19,7 +19,7 @@ const navigate = useNavigate();
        
         <div className="grid grid-cols-3 items-center justify-center p-6 shadow-xl gap-3 h-screen">
             {Databases.map((database,key)=>(
-              <div className="flex flex-col items-center justify-center shadow-xl text-xl font-bold bg-white hover:bg-orange-400 hover:text-white cursor-pointer rounded-xl h-[200px] w-[300px] active:bg-blue-400"
+              <div className="flex flex-col items-center justify-center border-2 shadow-md text-xl font-bold bg-white hover:bg-orange-400 hover:text-white cursor-pointer rounded-xl h-[200px] w-[300px] active:bg-orange-900"
               key = {key}
              
                onClick={() => navigate(`/home/${database.toLowerCase()+"db"}`)}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Arrangement = ({ argument, solution }) => {
+const Arrangement = ({ question, argument, solution }) => {
 
   console.log(argument);
   console.log(solution);
@@ -27,9 +27,9 @@ const Arrangement = ({ argument, solution }) => {
   
 
   return (
-    <div className="p-6 mt-3 flex flex-col items-center gap-4 text-white bg-gray-400">
-      <h2 className="text-2xl text-black font-bold mb-4">Arrange in Correct Order</h2>
-
+    <div className="p-6 mt-3 flex flex-col items-center gap-4 text-white border">
+      <h2 className="text-2xl text-black font-bold  font-serif">ARRANGE IN CORRECT ORDER</h2>
+                <div className="text-black">{question}</div>
                 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4  max-w-5xl text-black border-4 border-orange-100 w-full">
                   {items.map((option, index) => (
                     <div

@@ -86,6 +86,7 @@ const Login = ({ setName }) => {
                 </div>
                 <button
                   type="submit"
+                  onClick={() => navigate("/home")}
                   className="bg-orange-100 rounded-xl border-2 border-orange-600 text-white bg-orange-500"
                 >
                   execute query

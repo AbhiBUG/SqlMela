@@ -33,7 +33,7 @@ const NavBar = ({ user }) => {
       {/* Right: User Info + Dropdown */}
       <div className="relative flex items-center space-x-3" ref={dropdownRef}>
         {/* Username badge (hidden on small screens) */}
-        <span className="hidden sm:inline px-3 py-1 rounded-full bg-orange-100 text-orange-600 font-semibold text-sm shadow-sm">
+        <span className="hidden sm:inline px-3 py-1 rounded-full border-2 font-semibold text-sm shadow-sm">
           {user || "Guest"}
         </span>
 

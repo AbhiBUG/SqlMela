@@ -7,23 +7,15 @@ import {RiRefreshLine} from 'react-icons/ri'
 import {IoIosArrowDown} from 'react-icons/io'
 
 export default function GamePanel({ tableName }) {
-  
-  const [games, setGames] = useState([]); 
+   const [buttonState, setButtonState] = useState(0);
+
+  const [questions, getQuestion] = useState([]); 
   
   const [currentno,setCurrentno] = useState(0);
 
-  // const isCorrect =()=>{
-  //   const checkAnswer = () => {
-  //   if (JSON.stringify(items) === JSON.stringify(sol)) {
-  //     alert("✅ Correct Arrangement!");
-  //   } else {
-  //     alert("❌ Wrong Arrangement, try again.");
-  //   }
-  // };
-  // }  
 
 
-
+// console.log(GameComponents);
 
  // Fetch JSON dynamically based on tableName
   useEffect(() => {
@@ -35,21 +27,21 @@ export default function GamePanel({ tableName }) {
         return res.json();
       })
       .then((data) => {
-        setGames(data);
+        getQuestion(data);
         setCurrentno(0); // reset to first question when table changes
       })
       .catch((err) => console.error(err));
   }, [tableName]);
 
-  if (games.length === 0) {
+  if (questions.length === 0) {
     return <p className="text-white">Loading game data...</p>;
   }
 
 
 
   // Get current game
-  const currentGame = games[currentno];
-    console.log(tableName);
+  const currentGame = questions[currentno];
+    // console.log(tableName);
 
 
     const handleplay = () =>
@@ -63,10 +55,10 @@ export default function GamePanel({ tableName }) {
     <>
     <div className="border shadow bg-gray-900 h-screen flex flex-col items-center overflow-y-auto overflow-hidden">
      
-<div className="flex flex-row items-center justify-between px-5 bg-white w-full">
+<div className="flex flex-row items-center justify-between px-5 bg-gray-800 text-white w-full">
                         <div className="flex flex-row items-center">
                         <IoIosArrowDown />
-                        <h2 className="sticky top-0 bg-base-100 p-3 font-semibold text-black">
+                        <h2 className="sticky top-0 bg-base-100 p-3 font-semibold">
                           Exercises
                         </h2>
                         </div>
@@ -75,10 +67,10 @@ export default function GamePanel({ tableName }) {
                         <button className="text-white bg-black rounded-xl px-3" onClick={() => setCurrentno((prev) => Math.max(prev - 1, 0))}>
                           prev
                           </button>
-                            <FaPlay onClick={handleplay} className="cursor-pointer"/>
+                            <FaPlay onClick={()=>setButtonState(1)} className="cursor-pointer" />
                         <RiRefreshLine />
                         <button className="text-white bg-black rounded-xl px-3"  onClick={() =>
-    setCurrentno((prev) => Math.min(prev + 1, games.length - 1))
+    setCurrentno((prev) => Math.min(prev + 1, questions.length - 1))
   } >
                           Next
                           </button>
@@ -86,20 +78,23 @@ export default function GamePanel({ tableName }) {
                         </div>
               </div>
 
-     <div className="border p-4 shadow bg-gray-900 h-screen flex flex-col items-center overflow-y-auto overflow-hidden text-white w-full">
+     <div className="border p-4 shadow bg-white h-screen flex flex-col items-center overflow-y-auto overflow-hidden text-white w-full">
   {(() => {
-    const g = games[currentno];
-    const Game = GameComponents[g.game]; 
+    const question = questions[currentno]; //current question
+    
+    const Game = GameComponents[question.game]; 
+    // console.log(Game);
     return (
       <div className="">
         {Game ? (
           <Game
-            key={g.qn} // 👈 use qn as key so React re-renders on change
-            argument={g.arguments}
-            solution={g.solution}
+            key={question.qn}
+            question={question.question}
+            argument={question.arguments}
+            solution={question.solution}
           />
-        ) : (
-          <p>Backend error for {g.game}</p>
+        )  : (
+          <p>Backend error for {question.game}</p>
         )}
       </div>
     );

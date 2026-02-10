@@ -1,9 +1,9 @@
 import React from "react";
 import Split from "react-split";
 import { useParams } from "react-router-dom";
-import GamePanel from "../components/InnerPanels/GamePanel";
-import QueryResult from "../components/InnerPanels/QueryResult";
-import TableWindow from "../components/InnerPanels/TableWindow";
+import GamePanel from "../components/WorkingAreaPanels/GamePanel";
+import QueryResult from "../components/WorkingAreaPanels/QueryResult";
+import TableWindow from "../components/WorkingAreaPanels/TableWindow";
 import games from "../data/games.json";
 
 
@@ -56,21 +56,7 @@ export default function TablePage() {
           {/* Right Panel */}
           <div className="h-full overflow-hidden  bg-white">
             <div className="bg-base-100 rounded-2xl shadow-lg overflow-hidden flex flex-col h-full">
-              {/* <div className="flex flex-row items-center justify-between px-5">
-                        <div className="flex flex-row items-center">
-                        <IoIosArrowDown />
-                        <h2 className="sticky top-0 bg-base-100 p-3 font-semibold text-black border-b">
-                          Exercises
-                        </h2>
-                        </div>
-                        <div className="flex flex-row items-center">
-                        <FaPlay />
-                        <RiRefreshLine />
-                        <button className="text-white bg-black rounded-xl px-3">
-                          Next
-                          </button>
-                        </div>
-              </div> */}
+
               <div className="overflow-y-auto p-3 bg-white">
                 <GamePanel tableName={tableName} />
               </div>
