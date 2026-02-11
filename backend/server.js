@@ -91,6 +91,20 @@ app.get("/api/table/:tableName", async (req, res) => {
   }
 });
 
+
+app.post("/api/query/:tableName", async (req, res) => {
+  const { tableName } = req.params;
+  const { query } = req.body;
+
+  try {
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

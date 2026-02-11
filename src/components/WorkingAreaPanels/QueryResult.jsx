@@ -1,56 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function QueryResult({ tableName }) {
+export default function QueryResult({ tableName, queryResult }) {
+
   const [result, setResult] = useState([]);
 
-  // Example for future backend call
-  const runQuery = async () => {
-    const res = await fetch(`http://localhost:5000/api/query/${tableName}`);
-    const data = await res.json();
-    setResult(data);
+  const fetchData = async (query) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/query/${tableName}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        }
+      );
+
+      const data = await res.json();
+      console.log("Fetched Data:", data);
+      setResult(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
+  useEffect(() => {
+    if (!queryResult) return;
+
+    const d = queryResult;
+
+    if (d.results[0].result.valid) {
+      const query = d.results[0].statement; // ✅ CORRECT FIELD
+      fetchData(query);
+    }
+
+  }, [queryResult]); // 🔥 Runs only when queryResult changes
+
+  if (!queryResult) {
+    return (
+      <div className="border rounded-2xl shadow bg-white p-4 flex flex-col h-full">
+        <p className="text-gray-500 italic">No Results</p>
+      </div>
+    );
+  }
+
+  if (!queryResult.results[0].result.valid) {
+    return (
+      <h2 className="text-red-600 font-bold text-lg">
+        Invalid SQL Syntax
+      </h2>
+    );
+  }
+
   return (
-    <div className="border rounded-2xl shadow bg-white p-4 flex flex-col h-full">
-      
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        {result.length === 0 ? (
-          <p className="text-gray-500 italic">No Results</p>
-        ) : (
-          <table className="table-auto w-full border-collapse border border-gray-300 text-sm">
-            <thead className="bg-gray-100">
-              <tr>
-                {Object.keys(result[0]).map((col) => (
-                  <th
-                    key={col}
-                    className="border border-gray-300 px-3 py-2 text-left font-semibold"
-                  >
-                    {col}
-                  </th>
+    <div>
+      <h2 className="text-green-600 font-bold text-lg">
+        Valid Syntax!
+      </h2>
+
+      {result.length > 0 && (
+        <>
+        <h2 className="text-green-600">Query Executed Successfully!</h2>
+        <table className="table-auto w-full border-collapse border border-gray-300 text-sm">
+          <thead>
+            <tr>
+              {Object.keys(result[0]).map((col) => (
+                <th key={col} className="border px-3 py-2">
+                  {col}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {result.map((row, i) => (
+              <tr key={i}>
+                {Object.values(row).map((val, j) => (
+                  <td key={j} className="border px-3 py-2">
+                    {val}
+                  </td>
                 ))}
               </tr>
-            </thead>
-            <tbody>
-              {result.map((row, i) => (
-                <tr
-                  key={i}
-                  className="odd:bg-white even:bg-gray-50 hover:bg-blue-50"
-                >
-                  {Object.values(row).map((val, j) => (
-                    <td
-                      key={j}
-                      className="border border-gray-300 px-3 py-2 whitespace-nowrap"
-                    >
-                      {val}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+            ))}
+          </tbody>
+        </table>
+        </>
+      )}
     </div>
   );
 }

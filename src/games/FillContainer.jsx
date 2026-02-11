@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FillContainer = ({question,argument,solution}) => {
+const FillContainer = ({question,argument,solution,setScore,buttonState,setResult}) => {
 console.log(question);
   return (
     <div className=" w-full h-screen text-black">

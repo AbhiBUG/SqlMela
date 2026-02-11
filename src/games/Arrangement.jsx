@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-const Arrangement = ({ question, argument, solution }) => {
+const Arrangement = ({ question, argument, solution,setScore,buttonState,setResult}) => {
 
-  console.log(argument);
-  console.log(solution);
+  // console.log(argument);
+  // console.log(solution);
   const [items, setItems] = useState(argument);
   const [dragging, setDragging] = useState(null);
   const [overIndex, setOverIndex] = useState(null);

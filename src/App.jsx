@@ -12,7 +12,7 @@ import NavBar from "./components/navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/login.jsx";
 import Tables from "./pages/Tables.jsx";
-import TablePage from "./pages/TablePage.jsx";
+import TablePage from "./pages/WorkingArea.jsx";
 
 const ProtectedRoute = ({ user, children }) => {
   return user ? children : <Navigate to="/" replace />;

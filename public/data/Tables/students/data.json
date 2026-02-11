@@ -4,7 +4,7 @@
     "qn": 1,
     "question":"Arrange the words to form",
     "arguments": ["you!", "miss", "really", "I"],
-    "solution": "I really miss you!"
+    "solution": ["you!", "miss", "really", "I"]
   },
   {
     "game": "FillContainer",

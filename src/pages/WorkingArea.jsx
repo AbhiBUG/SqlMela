@@ -5,11 +5,16 @@ import GamePanel from "../components/WorkingAreaPanels/GamePanel";
 import QueryResult from "../components/WorkingAreaPanels/QueryResult";
 import TableWindow from "../components/WorkingAreaPanels/TableWindow";
 import games from "../data/games.json";
-
+import { useState } from "react";
 
 export default function TablePage() {
   const { dbName, tableName } = useParams();
   const tableGames = games.filter((g) => g.table === tableName);
+  // const [buttonFlag,setButtonFlag] = useState(0);
+  // console.log("Button Flag in Table Page: "+buttonFlag);
+   const [queryResult, setQueryResult] = useState(
+   null);
+// console.log("ParentPage queryResult:", queryResult);
 
   return (
     <div className="h-screen w-full bg-white ">
@@ -38,7 +43,10 @@ export default function TablePage() {
                 Results
               </h2>
               <div className="overflow-y-auto flex-1 p-3">
-                <QueryResult tableName={tableName} />
+                
+                <QueryResult tableName={tableName} 
+                queryResult={queryResult}
+          />
               </div>
             </div>
 
@@ -58,7 +66,9 @@ export default function TablePage() {
             <div className="bg-base-100 rounded-2xl shadow-lg overflow-hidden flex flex-col h-full">
 
               <div className="overflow-y-auto p-3 bg-white">
-                <GamePanel tableName={tableName} />
+                <GamePanel tableName={tableName} 
+       
+                setQueryResult={setQueryResult}/>
               </div>
             </div>
           </div>
@@ -72,7 +82,7 @@ export default function TablePage() {
             Query & Table
           </summary>
           <div className="overflow-y-auto max-h-[50vh] p-3">
-            <QueryResult tableName={tableName} />
+            <QueryResult tableName={tableName} queryResult={queryResult} />
             <TableWindow tableName={tableName} />
           </div>
         </details>
@@ -82,10 +92,11 @@ export default function TablePage() {
             Exercises
           </summary>
           <div className="overflow-y-auto max-h-[50vh]">
-            <GamePanel tableName={tableName} />
+            <GamePanel tableName={tableName}  setQueryResult={setQueryResult} />
           </div>
         </details>
       </div>
+  
     </div>
   );
 }

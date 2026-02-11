@@ -1,22 +1,68 @@
-import React from 'react'
+import React, { useState } from "react";
+import { useEffect } from "react";
+const Query = ({ question,argument,solution,setScore,buttonState,setResult }) => {
+  const [sql, setSql] = useState("");
+  // const [result, setResult] = useState(null);
+  console.log(sql);
+  const validateSQL = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/validate/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sql: sql,
+          dialect: "ansi",
+        }),
+      });
 
-const Query = ({question,argument,solution}) => {
-console.log(question);
+      const data = await response.json();
+      setResult(data);
+       console.log("Game input : "+JSON.stringify(data));
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+useEffect(() => {
+  if (buttonState > 0) {
+    validateSQL();
+  }
+}, [buttonState]);
+
+  //   useEffect(() => {
+  //   if (result) {
+  //     setResult(result);
+  //   }
+  // }, [result]);
+
   return (
-            
-            <div className="question text-white flex-row items-center justify-center p-4 border-2 ">
-              <div className="bg-gray-900 w-full">{question}
-                </div>
-              <div className="w-[500px] h-screen">
-                <textarea type="text" className="bg-blue-900 w-full" placeholder='Enter Query'></textarea>
-              </div>
-           
-
+    <div className="question text-white flex flex-col items-center p-4 border-2">
       
-         
+      <div className="bg-gray-900 w-full p-2">
+        {question}
       </div>
-    
-  )
-}
 
-export default Query
+      <div className="w-[500px]">
+        <textarea
+          className="bg-blue-900 w-full h-40 p-2"
+          placeholder="Enter Query"
+          value={sql}
+          onChange={(e) => setSql(e.target.value)}
+        />
+      </div>
+
+
+{/* 
+      {result && (
+        <div className="mt-4 bg-gray-800 p-3 w-full">
+          <pre>{JSON.stringify(result, null, 2)}</pre>
+          
+        </div>
+      )} */}
+    </div>
+  );
+};
+
+export default Query;
