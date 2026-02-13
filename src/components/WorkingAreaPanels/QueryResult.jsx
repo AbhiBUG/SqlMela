@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function QueryResult({ tableName, queryResult }) {
-
+  //queryResult is return of the parser
   const [result, setResult] = useState([]);
 
   const fetchData = async (query) => {
@@ -31,11 +31,11 @@ export default function QueryResult({ tableName, queryResult }) {
     const d = queryResult;
 
     if (d.results[0].result.valid) {
-      const query = d.results[0].statement; // ✅ CORRECT FIELD
+      const query = d.results[0].statement; // CORRECT FIELD
       fetchData(query);
     }
 
-  }, [queryResult]); // 🔥 Runs only when queryResult changes
+  }, [queryResult]); //Runs only when queryResult changes
 
   if (!queryResult) {
     return (
@@ -47,7 +47,7 @@ export default function QueryResult({ tableName, queryResult }) {
 
   if (!queryResult.results[0].result.valid) {
     return (
-      <h2 className="text-red-600 font-bold text-lg">
+      <h2 className="text-red-600 font-bold">
         Invalid SQL Syntax
       </h2>
     );
@@ -55,13 +55,13 @@ export default function QueryResult({ tableName, queryResult }) {
 
   return (
     <div>
-      <h2 className="text-green-600 font-bold text-lg">
+      <h2 className="text-orange-400 font-bold">
         Valid Syntax!
       </h2>
 
-      {result.length > 0 && (
+      {result.length > 0 ? (
         <>
-        <h2 className="text-green-600">Query Executed Successfully!</h2>
+        <h2 className="text-orange-400 font-bold">Query Executed Successfully!</h2>
         <table className="table-auto w-full border-collapse border border-gray-300 text-sm">
           <thead>
             <tr>
@@ -85,7 +85,11 @@ export default function QueryResult({ tableName, queryResult }) {
           </tbody>
         </table>
         </>
-      )}
+      ):
+      <h2 className="text-yellow-400 font-bold">
+        Query cannot be executed on current table.
+      </h2>
+      }
     </div>
   );
 }

@@ -29,7 +29,7 @@ const Arrangement = ({ question, argument, solution,setScore,buttonState,setResu
   return (
     <div className="p-6 mt-3 flex flex-col items-center gap-4 text-white border">
       <h2 className="text-2xl text-black font-bold  font-serif">ARRANGE IN CORRECT ORDER</h2>
-                <div className="text-black">{question}</div>
+                <div className="text-black font-bold">{question}</div>
                 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4  max-w-5xl text-black border-4 border-orange-100 w-full">
                   {items.map((option, index) => (
                     <div
@@ -42,12 +42,12 @@ const Arrangement = ({ question, argument, solution,setScore,buttonState,setResu
                       }}
                       onDragLeave={() => setOverIndex(null)}
                       onDrop={() => handleDrop(index)}
-                      className={` py-4 px-20  text-center  shadow-md cursor-move transition-all duration-200 
+                      className={` py-4 px-20  text-center shadow-md cursor-move transition-all duration-200 
                         ${dragging === index
                           ? "bg-orange-300 scale-95"
                           : overIndex === index
-                            ? "bg-blue-200 border-2 border-blue-500 scale-105"
-                            : "bg-white hover:bg-gray-100"
+                            ? "bg-orange-200 border-2 border-orange-500 scale-105"
+                            : "bg-orange-400 hover:bg-orange-100"
                         }
                       `}
                     >

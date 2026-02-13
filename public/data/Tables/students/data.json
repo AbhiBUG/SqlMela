@@ -2,71 +2,114 @@
   {
     "game": "Arrangement",
     "qn": 1,
-    "question":"Arrange the words to form",
-    "arguments": ["you!", "miss", "really", "I"],
-    "solution": ["you!", "miss", "really", "I"]
-  },
-  {
-    "game": "FillContainer",
-    "qn": 2,
-    "question":"Fill in the blanks",
-    "arguments": ["G?", "are", "How", "Hi!"],
-    "solution": "Hi! How are You?"
+    "question": "Arrange in correct SQL order",
+    "arguments": ["FROM", "SELECT", "*", "students"],
+    "solution": ["SELECT", "*", "FROM", "students"]
   },
   {
     "game": "Query",
-    "qn": 3,
-    "question":"Execute the query",
-    "arguments":"select * from students where age=15;",
+    "qn": 2,
+    "question": "Find students with age 15",
+    "arguments": "select * from students where age = 15;",
     "solution": ""
   },
   {
     "game": "Arrangement",
+    "qn": 3,
+    "question": "Arrange clauses in proper SQL execution order",
+    "arguments": ["WHERE", "SELECT", "FROM", "ORDER BY"],
+    "solution": ["SELECT", "FROM", "WHERE", "ORDER BY"]
+  },
+  {
+    "game": "Query",
     "qn": 4,
-    "question":"Fill in the blanks",
-    "arguments": ["world!", "Hello"],
-    "solution": "Hello world!"
+    "question": "Count total students",
+    "arguments": "select count(*) from students;",
+    "solution": ""
   },
   {
     "game": "Arrangement",
     "qn": 5,
-        "question":"Fill in the blanks",
-    "arguments": ["awesome.", "is", "React"],
-    "solution": "React is awesome."
+    "question": "Arrange GROUP BY query correctly",
+    "arguments": ["department", "GROUP BY", "students", "SELECT"],
+    "solution": ["SELECT", "department", "FROM", "students", "GROUP BY", "department"]
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 6,
-        "question":"Fill in the blanks",
-    "arguments": ["fast.", "is", "JavaScript"],
-    "solution": "JavaScript is fast."
+    "question": "Find students scoring above 80",
+    "arguments": "select * from students where marks > 80;",
+    "solution": ""
   },
   {
     "game": "Arrangement",
     "qn": 7,
-        "question":"Fill in the blanks",
-    "arguments": ["learning", "AI", "love", "I"],
-    "solution": "I love learning AI"
+    "question": "Arrange ORDER BY query",
+    "arguments": ["marks DESC", "ORDER BY", "students", "SELECT * FROM"],
+    "solution": ["SELECT * FROM", "students", "ORDER BY", "marks DESC"]
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 8,
-        "question":"Fill in the blanks",
-    "arguments": ["day.", "sunny", "a", "It's"],
-    "solution": "It's a sunny day."
+    "question": "Find average marks",
+    "arguments": "select avg(marks) from students;",
+    "solution": ""
   },
   {
     "game": "Arrangement",
     "qn": 9,
-        "question":"Fill in the blanks",
-    "arguments": ["pizza!", "like", "I"],
-    "solution": "I like pizza!"
+    "question": "Arrange INNER JOIN query",
+    "arguments": ["ON s.id = r.student_id", "students s", "results r", "INNER JOIN", "SELECT s.name"],
+    "solution": [
+      "SELECT s.name",
+      "FROM",
+      "students s",
+      "INNER JOIN",
+      "results r",
+      "ON s.id = r.student_id"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 10,
+    "question": "Find students between age 15 and 18",
+    "arguments": "select * from students where age between 15 and 18;",
+    "solution": ""
   },
   {
     "game": "Arrangement",
-    "qn": 10,
-        "question":"Fill in the blanks",
-    "arguments": ["early.", "up", "wake", "I"],
-    "solution": "I wake up early."
+    "qn": 11,
+    "question": "Arrange HAVING clause query",
+    "arguments": ["HAVING count(*) > 5", "department", "GROUP BY", "SELECT", "students"],
+    "solution": [
+      "SELECT",
+      "department",
+      "FROM",
+      "students",
+      "GROUP BY",
+      "department",
+      "HAVING count(*) > 5"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 12,
+    "question": "Find students whose name starts with 'A'",
+    "arguments": "select * from students where name like 'A%';",
+    "solution": ""
+  },
+  {
+    "game": "FillContainer",
+    "qn": 13,
+    "question": "Fill the SQL blanks",
+    "arguments": ["SELECT", "FROM", "WHERE", "*", "students", "age = 20"],
+    "solution": "SELECT * FROM students WHERE age = 20"
+  },
+  {
+    "game": "Query",
+    "qn": 14,
+    "question": "Find maximum marks",
+    "arguments": "select max(marks) from students;",
+    "solution": ""
   }
 ]

@@ -64,14 +64,14 @@ const pool = new Pool({
 
 // Test DB connection once
 pool.connect()
-  .then(() => console.log("✅ Connected to PostgreSQL database"))
+  .then(() => console.log("Connected to PostgreSQL database"))
   .catch((err) => console.error("❌ Failed to connect to DB:", err.message));
 
 // Route to fetch table data
 app.get("/api/table/:tableName", async (req, res) => {
   const { tableName } = req.params;
 
-  console.log(`📥 Incoming request for table: "${tableName}"`);
+  console.log(`Incoming request for table: "${tableName}"`);
 
   try {
     // ⚠️ Validate table name to avoid SQL injection
