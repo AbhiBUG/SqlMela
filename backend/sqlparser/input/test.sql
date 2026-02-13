@@ -1,5 +1,5 @@
 
-SELECT AVG(salary) FROM employees;
+SELECT AVG(salary) FRM employees;
 
 SELECT MAX(price) FROM products;
 
@@ -28,8 +28,8 @@ SELECT AVG(salary) as mean FROM employees;
 SELECT AVG(salary) as salary_mean FROM employees;
 SELECT AVG(salary) as company_average FROM employees;
 
-SELECT AVG(`salary`) FROM `employees`;
-SELECT MAX(`user-id`) FROM `user-data`;
+SELECT AVG(`salary) FROM `employees`;
+SELECT MAX(`user-id` FROM `user-data`;
 
 SELECT 
     COUNT(employee_id) as total_employees,
@@ -86,7 +86,7 @@ FROM employees
 GROUP BY department_id
 HAVING avg_sal > 100000;
 
-SELECT department_id, COUNT(*) as emp_count
+SELECT department_id, COUNT(*) s emp_count
 FROM employees
 GROUP BY department_id
 HAVING emp_count > 10;
