@@ -1,10 +1,13 @@
+
 [
-  {
-    "game": "Arrangement",
+
+    {
+    "game": "OutputGuessing",
     "qn": 1,
-    "question": "Arrange in correct SQL order",
-    "arguments": ["FROM", "SELECT", "*", "students"],
+    "question": "select * from students where age=15;",
+    "arguments": [2,5],
     "solution": ["SELECT", "*", "FROM", "students"]
+  
   },
   {
     "game": "Query",
@@ -51,8 +54,8 @@
   {
     "game": "Query",
     "qn": 8,
-    "question": "Find average marks",
-    "arguments": "select avg(marks) from students;",
+    "question": "Find average age",
+    "arguments": "select avg(age) from students;",
     "solution": ""
   },
   {

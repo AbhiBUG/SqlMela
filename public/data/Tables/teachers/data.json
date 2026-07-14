@@ -1,24 +1,324 @@
 [
-    {
-"game":"Arrangement",
-"qn": 1,
-"question":"Arrange the words",
-"arguments":["I love","icecream","eating"],
-"solution":"I love eating icecream"
-    },
-
-    {
-"game":"Arrangement",
-"qn": 2,
-"question":"Arrange the words",
-"arguments":["Create","tablename","tablename","table"],
-"solution":"Create table tablename tablename"
-    },
-{
-"game":"Arrangement",
-"qn": 3,
-"question":"Arrange the words",
-"arguments":["2","4","6","8"],
-"solution":"8642"
-    }
+  {
+    "game": "Query",
+    "qn": 1,
+    "question": "Find all teachers who teach 'Physics'",
+    "arguments": "SELECT * FROM teachers WHERE subject = 'Physics';",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 2,
+    "question": "Arrange a query to find teachers with more than 8 years of experience",
+    "arguments": ["WHERE experience > 8;", "teachers", "SELECT *", "FROM"],
+    "solution": ["SELECT *", "FROM", "teachers", "WHERE experience > 8;"]
+  },
+  {
+    "game": "Query",
+    "qn": 3,
+    "question": "Find the maximum experience among all teachers",
+    "arguments": "SELECT MAX(experience) FROM teachers;",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 4,
+    "question": "Arrange a query to list teachers ordered by their experience in descending order",
+    "arguments": ["experience DESC;", "ORDER BY", "teachers", "SELECT teacher_name,", "FROM"],
+    "solution": ["SELECT teacher_name,", "FROM", "teachers", "ORDER BY", "experience DESC;"]
+  },
+  {
+    "game": "Query",
+    "qn": 5,
+    "question": "Find the average years of experience of all teachers",
+    "arguments": "SELECT AVG(experience) FROM teachers;",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 6,
+    "question": "Arrange a query to count how many teachers teach each unique subject",
+    "arguments": ["subject;", "GROUP BY", "teachers", "SELECT subject, COUNT(*)", "FROM"],
+    "solution": ["SELECT subject, COUNT(*)", "FROM", "teachers", "GROUP BY", "subject;"]
+  },
+  {
+    "game": "Query",
+    "qn": 7,
+    "question": "List each student's name along with their assigned teacher's name",
+    "arguments": "SELECT s.student_name, t.teacher_name FROM students s INNER JOIN teachers t ON s.teacher_id = t.teacher_id;",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 8,
+    "question": "Arrange an INNER JOIN query to find students taught by 'Anjali Sharma'",
+    "arguments": [
+      "ON s.teacher_id = t.teacher_id",
+      "INNER JOIN teachers t",
+      "WHERE t.teacher_name = 'Anjali Sharma';",
+      "students s",
+      "SELECT s.student_name",
+      "FROM"
+    ],
+    "solution": [
+      "SELECT s.student_name",
+      "FROM",
+      "students s",
+      "INNER JOIN teachers t",
+      "ON s.teacher_id = t.teacher_id",
+      "WHERE t.teacher_name = 'Anjali Sharma';"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 9,
+    "question": "Find all students who are being taught by a teacher with more than 9 years of experience",
+    "arguments": "SELECT s.student_name FROM students s INNER JOIN teachers t ON s.teacher_id = t.teacher_id WHERE t.experience > 9;",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 10,
+    "question": "Arrange a query to count the number of students assigned to each teacher",
+    "arguments": [
+      "GROUP BY t.teacher_name;",
+      "students s ON t.teacher_id = s.teacher_id",
+      "SELECT t.teacher_name, COUNT(s.student_id)",
+      "FROM teachers t",
+      "LEFT JOIN"
+    ],
+    "solution": [
+      "SELECT t.teacher_name, COUNT(s.student_id)",
+      "FROM teachers t",
+      "LEFT JOIN",
+      "students s ON t.teacher_id = s.teacher_id",
+      "GROUP BY t.teacher_name;"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 11,
+    "question": "Find teachers whose names start with the letter 'P'",
+    "arguments": "SELECT * FROM teachers WHERE teacher_name LIKE 'P%';",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 12,
+    "question": "Arrange a query to find subjects taught by teachers who have experience between 5 and 10 years",
+    "arguments": ["experience BETWEEN 5 AND 10;", "WHERE", "teachers", "SELECT DISTINCT subject", "FROM"],
+    "solution": ["SELECT DISTINCT subject", "FROM", "teachers", "WHERE", "experience BETWEEN 5 AND 10;"]
+  },
+  {
+    "game": "Query",
+    "qn": 13,
+    "question": "Find the total experience of teachers who teach either 'Physics' or 'Chemistry'",
+    "arguments": "SELECT SUM(experience) FROM teachers WHERE subject IN ('Physics', 'Chemistry');",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 14,
+    "question": "Arrange a subquery to select student details whose teacher is 'Rajesh Kumar'",
+    "arguments": [
+      "WHERE teacher_name = 'Rajesh Kumar')",
+      "SELECT teacher_id",
+      "FROM teachers",
+      "WHERE teacher_id = (",
+      "SELECT student_name",
+      "FROM students"
+    ],
+    "solution": [
+      "SELECT student_name",
+      "FROM students",
+      "WHERE teacher_id = (",
+      "SELECT teacher_id",
+      "FROM teachers",
+      "WHERE teacher_name = 'Rajesh Kumar')"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 15,
+    "question": "Find the subject taught to the student named 'Arjun Mehta'",
+    "arguments": "SELECT t.subject FROM teachers t INNER JOIN students s ON t.teacher_id = s.teacher_id WHERE s.student_name = 'Arjun Mehta';",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 16,
+    "question": "Find all teachers who have strictly more experience than 'Priya Singh'",
+    "arguments": "SELECT * FROM teachers WHERE experience > (SELECT experience FROM teachers WHERE teacher_name = 'Priya Singh');",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 17,
+    "question": "Arrange a query to find the average age of students grouped by their class",
+    "arguments": ["class;", "GROUP BY", "students", "SELECT class, AVG(age)", "FROM"],
+    "solution": ["SELECT class, AVG(age)", "FROM", "students", "GROUP BY", "class;"]
+  },
+  {
+    "game": "Query",
+    "qn": 18,
+    "question": "Find the name and subject of the teacher assigned to student 'Sneha Patel'",
+    "arguments": "SELECT t.teacher_name, t.subject FROM teachers t INNER JOIN students s ON t.teacher_id = s.teacher_id WHERE s.student_name = 'Sneha Patel';",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 19,
+    "question": "Arrange a subquery to find students whose age is strictly greater than the average student age",
+    "arguments": [
+      "FROM students);",
+      "SELECT AVG(age)",
+      "WHERE age > (",
+      "FROM students",
+      "SELECT student_name"
+    ],
+    "solution": [
+      "SELECT student_name",
+      "FROM students",
+      "WHERE age > (",
+      "SELECT AVG(age)",
+      "FROM students);"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 20,
+    "question": "Count how many students are exactly 14 years old",
+    "arguments": "SELECT COUNT(*) FROM students WHERE age = 14;",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 21,
+    "question": "Arrange a query to list teachers who have NO students assigned to them",
+    "arguments": [
+      "WHERE s.student_id IS NULL;",
+      "ON t.teacher_id = s.teacher_id",
+      "LEFT JOIN students s",
+      "FROM teachers t",
+      "SELECT t.teacher_name"
+    ],
+    "solution": [
+      "SELECT t.teacher_name",
+      "FROM teachers t",
+      "LEFT JOIN students s",
+      "ON t.teacher_id = s.teacher_id",
+      "WHERE s.student_id IS NULL;"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 22,
+    "question": "Find teachers whose subject names contain 'math' (case-insensitive pattern search)",
+    "arguments": "SELECT * FROM teachers WHERE subject ILIKE '%math%';",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 23,
+    "question": "Arrange a query to find students whose teacher has more than 10 years of experience",
+    "arguments": [
+      "WHERE t.experience > 10;",
+      "ON s.teacher_id = t.teacher_id",
+      "INNER JOIN teachers t",
+      "FROM students s",
+      "SELECT s.student_name"
+    ],
+    "solution": [
+      "SELECT s.student_name",
+      "FROM students s",
+      "INNER JOIN teachers t",
+      "ON s.teacher_id = t.teacher_id",
+      "WHERE t.experience > 10;"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 24,
+    "question": "Find the average age of all students taught by 'Anjali Sharma'",
+    "arguments": "SELECT AVG(s.age) FROM students s INNER JOIN teachers t ON s.teacher_id = t.teacher_id WHERE t.teacher_name = 'Anjali Sharma';",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 25,
+    "question": "Arrange a query to order teachers by subject alphabetically, and then by experience descending",
+    "arguments": [
+      "experience DESC;",
+      "ORDER BY subject ASC,",
+      "teachers",
+      "SELECT *",
+      "FROM"
+    ],
+    "solution": [
+      "SELECT *",
+      "FROM",
+      "teachers",
+      "ORDER BY subject ASC,",
+      "experience DESC;"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 26,
+    "question": "Find details of students whose names contain 'Yadav'",
+    "arguments": "SELECT * FROM students WHERE student_name LIKE '%Yadav%';",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 27,
+    "question": "Arrange a query to count how many students are taught by teachers with less than 10 years of experience",
+    "arguments": [
+      "WHERE t.experience < 10;",
+      "ON s.teacher_id = t.teacher_id",
+      "INNER JOIN teachers t",
+      "FROM students s",
+      "SELECT COUNT(s.student_id)"
+    ],
+    "solution": [
+      "SELECT COUNT(s.student_id)",
+      "FROM students s",
+      "INNER JOIN teachers t",
+      "ON s.teacher_id = t.teacher_id",
+      "WHERE t.experience < 10;"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 28,
+    "question": "Find the teacher name and subject of the youngest student in the table",
+    "arguments": "SELECT t.teacher_name, t.subject FROM teachers t INNER JOIN students s ON t.teacher_id = s.teacher_id WHERE s.age = (SELECT MIN(age) FROM students);",
+    "solution": ""
+  },
+  {
+    "game": "Arrangement",
+    "qn": 29,
+    "question": "Arrange a query to select student names in class 10 taught by teacher with ID 1",
+    "arguments": [
+      "AND teacher_id = 1;",
+      "WHERE class = 10",
+      "students",
+      "SELECT student_name",
+      "FROM"
+    ],
+    "solution": [
+      "SELECT student_name",
+      "FROM",
+      "students",
+      "WHERE class = 10",
+      "AND teacher_id = 1;"
+    ]
+  },
+  {
+    "game": "Query",
+    "qn": 30,
+    "question": "List all distinct subjects taught to students who are 15 years old",
+    "arguments": "SELECT DISTINCT t.subject FROM teachers t INNER JOIN students s ON t.teacher_id = s.teacher_id WHERE s.age = 15;",
+    "solution": ""
+  }
 ]

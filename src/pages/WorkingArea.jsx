@@ -1,8 +1,8 @@
 import React from "react";
 import Split from "react-split";
 import { useParams } from "react-router-dom";
-import GamePanel from "../components/WorkingAreaPanels/GamePanel";
-import QueryResult from "../components/WorkingAreaPanels/QueryResult";
+import InteractionWindow from "../components/WorkingAreaPanels/InteractionWindow";
+import ResultWindow from "../components/WorkingAreaPanels/ResultWindow";
 import TableWindow from "../components/WorkingAreaPanels/TableWindow";
 import games from "../data/games.json";
 import { useState } from "react";
@@ -17,42 +17,42 @@ export default function TablePage() {
 // console.log("ParentPage queryResult:", queryResult);
 
   return (
-    <div className="h-screen w-full bg-white ">
-      {/* ✅ Desktop Split View */}
+    <div className="h-screen w-full">
+      {/*  Desktop Split View */}
       <div className="hidden md:block h-full">
         <Split
-          className="flex h-full"
+          className="flex h-full "
           sizes={[55, 45]}
           minSize={320}
-          gutterSize={10}
+          gutterSize={2}
           gutterAlign="center"
           dragInterval={1}
           cursor="col-resize"
           gutter={() => {
             const gutter = document.createElement("div");
             gutter.className =
-              "bg-gray-300 hover:bg-primary transition-colors rounded-md w-[6px] mx-auto cursor-col-resize";
+              "bg-gray-300 hover:bg-white transition-colors  w-[6px] mx-auto cursor-col-resize";
             return gutter;
           }}
         >
           {/* Left Panel */}
-          <div className="p-4 flex flex-col h-full gap-4 overflow-hidden bg-white">
+          <div className=" flex flex-col h-full  overflow-hidden bg-primary/50">
             {/* Query Section */}
-            <div className="flex-1 bg-base-100 rounded-2xl shadow-lg overflow-hidden flex flex-col">
-              <h2 className="sticky top-0 bg-base-100 p-3 font-semibold text-lg border-b">
+            <div className="flex-1 bg-base-100  shadow-lg overflow-hidden flex flex-col h-full ">
+              <h2 className="sticky text-white  bg-base top-0 p-1 font-semibold text-lg border-b text-[10px] px-2">
                 Results
               </h2>
-              <div className="overflow-y-auto flex-1 p-3">
+              <div className="overflow-y-auto flex-1  bg-white p-2 px-2 border-b-[10px]">
                 
-                <QueryResult tableName={tableName} 
+                <ResultWindow tableName={tableName} 
                 queryResult={queryResult}
           />
               </div>
             </div>
 
             {/* Table Section */}
-            <div className="flex-1 bg-base-100 rounded-2xl shadow-lg overflow-hidden flex flex-col">
-              <h2 className="sticky top-0 bg-base-100 p-3 font-semibold text-lg border-b">
+            <div className="flex-1  shadow-lg overflow-hidden flex flex-col">
+              <h2 className="sticky top-0 bg-base-100 p-1 font-semibold text-lg border-b bg-base text-surface text-[10px]">
                 Table : {tableName}
               </h2>
               <div className="overflow-y-auto flex-1 p-3">
@@ -62,39 +62,17 @@ export default function TablePage() {
           </div>
 
           {/* Right Panel */}
-          <div className="h-full overflow-hidden  bg-white">
-            <div className="bg-base-100 rounded-2xl shadow-lg overflow-hidden flex flex-col h-full">
+          <div className="h-full overflow-hidden  bg-primary/50">
+            <div className=" shadow-lg overflow-hidden flex flex-col h-full">
 
-              <div className="overflow-y-auto p-3 bg-white">
-                <GamePanel tableName={tableName} 
+              <div className="overflow-y-auto ">
+                <InteractionWindow tableName={tableName} 
        
                 setQueryResult={setQueryResult}/>
               </div>
             </div>
           </div>
         </Split>
-      </div>
-
-      {/* ✅ Mobile stacked layout */}
-      <div className="md:hidden flex flex-col h-full p-3 gap-3">
-        <details open className="flex-1 bg-base-100 rounded-2xl shadow-lg overflow-hidden">
-          <summary className="p-3 font-semibold text-lg cursor-pointer bg-base-200 border-b rounded-t-2xl">
-            Query & Table
-          </summary>
-          <div className="overflow-y-auto max-h-[50vh] p-3">
-            <QueryResult tableName={tableName} queryResult={queryResult} />
-            <TableWindow tableName={tableName} />
-          </div>
-        </details>
-
-        <details open className="flex-1 bg-base-100 rounded-2xl shadow-lg overflow-hidden">
-          <summary className="p-3 font-semibold cursor-pointer bg-base-200 border-b rounded-t-2xl">
-            Exercises
-          </summary>
-          <div className="overflow-y-auto max-h-[50vh]">
-            <GamePanel tableName={tableName}  setQueryResult={setQueryResult} />
-          </div>
-        </details>
       </div>
   
     </div>

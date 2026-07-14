@@ -21,9 +21,12 @@ class TokenType(Enum):
     IDENTIFIER = auto(); STRING = auto(); NUMBER = auto(); BACKTICK_IDENTIFIER = auto()
     
 
+    # ASTERISK = auto(); COMMA = auto(); SEMICOLON = auto(); LPAREN = auto()
+    # RPAREN = auto(); EQUALS = auto(); GREATER = auto(); LESS = auto()
+    # BANG = auto(); NOT_EQUALS = auto()
+    
     ASTERISK = auto(); COMMA = auto(); SEMICOLON = auto(); LPAREN = auto()
     RPAREN = auto(); EQUALS = auto(); GREATER = auto(); LESS = auto()
-    BANG = auto(); NOT_EQUALS = auto()
-    
+    BANG = auto(); NOT_EQUALS = auto(); DOT = auto()
 
     EOF = auto(); UNKNOWN = auto()

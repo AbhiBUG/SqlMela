@@ -2,28 +2,36 @@ import { React, useState, useEffect } from "react";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import DB from "../assets/DB.png";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
 
-const Login = ({ setName }) => {
+const Login = ({ setUser }) => {
   const [state, setState] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const togglePassword = () => setState(!state);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const userObj = JSON.parse(savedUser);
-      setName(userObj.username);
+      setUser(userObj);
       navigate("/home");
     }
-  }, [navigate, setName]);
+  }, [navigate, setUser]);
+
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      console.log(username,password);
       const res = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,17 +41,23 @@ const Login = ({ setName }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Login Successfull");
+        // alert("Login Successfull");
 
-        // ✅ Save user persistently
+        //  Save user persistently
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        setName(username);
+        setUser(data.user);
         navigate("/home");
       } else {
-        alert("Invalid Credentials");
+       
+         
+           setIsModalOpen(true);
+       
+        // alert("Invalid Credentials");
+          
       }
-    } catch (err) {
+      }
+     catch (err) {
       console.log(err);
     }
   };
@@ -86,7 +100,6 @@ const Login = ({ setName }) => {
                 </div>
                 <button
                   type="submit"
-                  onClick={() => navigate("/home")}
                   className="bg-orange-100 rounded-xl border-2 border-orange-600 text-white bg-orange-500"
                 >
                   execute query
@@ -98,6 +111,13 @@ const Login = ({ setName }) => {
           </div>
         </div>
       </div>
+      <Modal
+  isOpen={isModalOpen}
+  onClose={handleCloseModal}
+  title="Invalid Credentials"
+>
+  Username or password is incorrect.
+</Modal>
     </>
   );
 };

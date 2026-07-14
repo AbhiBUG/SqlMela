@@ -1,41 +1,46 @@
 import { React, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Tables from '../components/DatabasesUI.jsx';
-import Practice from '../components/Practice.jsx';
-import Tests from '../components/Tests.jsx';
+import Tables from '../components/Tabs/Database.jsx';
+import Practice from '../components/Tabs/Practice.jsx';
+import Tests from '../components/Tabs/Test.jsx';
 const Home = () => {
-  const navigate = useNavigate();
-  const tabs = ["Databases", "Practice", "Tests"];
   const [value, setValue] = useState(0);
-  const tabsContent = [<Tables />, <Practice />, <Tests />];
-
+  const tabs = [
+    {
+      name:"Databases",
+      component:<Tables/>
+    },
+        {
+      name:"Practice",
+      component:<Practice/>
+    },
+        {
+      name:"Tests",
+      component:<Tests/>
+    }
+  ]
 
   return (
     <>
       <div>
-        <div className="h-screen mt-[40px] pl-10">
-          <div className="flex flex-col items-center justify-center ">
-            <ul className="flex flex-row items-center justify-start w-screen ">
+        <div className="h-screen mt-[40px]">
+          <div className="flex flex-col items-center justify-center bg-white">
+            <ul className="flex flex-row items-center justify-start border-2 w-full">
               
               {tabs.map((tab, key) => (
                 <li
-                  className={` shadow-xl pl-2 pr-2 ${value === key ? "bg-white" : "bg-orange-300 text-white"} hover:bg-orange-400 cursor-pointer active:bg-orange-200 transition-colors`}
+                  className={` shadow-xl pl-2 pr-2 border-2 text-[20px] font-bold ${value === key ? "bg-white  " : "bg-orange-300 text-white"} cursor-pointer active:bg-white transition-colors`}
                   key={key}
                   onClick={() => setValue(key)}
                 >
-                  {tab}
-
+                  {tab.name}
                 </li>
               ))}
 
             </ul>
 
             <div className="bg-white w-screen">
-
-              
-                {tabsContent[value]}
-
-            
+                {tabs[value].component} 
             </div>
 
 

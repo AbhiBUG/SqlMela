@@ -7,35 +7,37 @@ import {
   useNavigate,
 } from "react-router-dom";
 import "./index.css";
-import BG from "./assets/bg.jpg";
+// import BG from "./assets/bg.jpg";
+import BG from "./assets/bg1.png";
 import NavBar from "./components/navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/login.jsx";
 import Tables from "./pages/Tables.jsx";
 import TablePage from "./pages/WorkingArea.jsx";
+import Profile from "./pages/Profile.jsx";
 
 const ProtectedRoute = ({ user, children }) => {
   return user ? children : <Navigate to="/" replace />;
 };
 
 const App = () => {
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUsername(JSON.parse(storedUser).username);
+      setUser(JSON.parse(storedUser));
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    setUsername("");
+    setUser(null);
   };
 
   return (
     <Router>
-      <NavBar user={username || "Guest"} onLogout={handleLogout} />
+      <NavBar user={user} handleLogout={handleLogout} />
 
       <div
         style={{ backgroundImage: `url(${BG})` }}
@@ -44,36 +46,49 @@ const App = () => {
         {/* overlay for readability */}
         <div className="absolute "></div>
 
-        <main className="flex-1 pt-16 relative z-10">
+        <main className="flex-1 pt-10 relative z-10">
           <Routes>
-            <Route path="/" element={<Login setName={setUsername} />} />
+            <Route path="/" element={<Login setUser={setUser} />} />
 
             <Route
               path="/home"
               element={
-                // <ProtectedRoute user={username}>
+                <ProtectedRoute user={user}>
                   <Home />
-                // </ProtectedRoute>
+                 </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute user={user}>
+                  <Profile username={user?.username} />
+                 </ProtectedRoute>
               }
             />
 
             <Route
               path="/home/:dbName"
               element={
-                // <ProtectedRoute user={username}>
+                 <ProtectedRoute user={user}>
                   <Tables />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               }
             />
 
             <Route
               path="/home/:dbName/:tableName"
               element={
-                // <ProtectedRoute user={username}>
-                  <TablePage />
-                // </ProtectedRoute>
+                <ProtectedRoute user={user}>
+                  <TablePage user={user} setUser={setUser} />
+                </ProtectedRoute>
               }
             />
+
+            <Route path="*" element={<Navigate to="/" replace />} />
+
+
           </Routes>
         </main>
       </div>

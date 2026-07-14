@@ -15,26 +15,45 @@ app.use(express.json());
 // Path to users file
 const usersFile = path.resolve("DB/user.json");
 
+const ensureUserStats = (user) => ({
+  score: 0,
+  gamesPlayed: 0,
+  problemsSolved: 0,
+  accuracy: 0,
+  streak: 0,
+  xp: 0,
+  ...user,
+});
+
+const saveUsers = () => {
+  try {
+    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2), "utf-8");
+  } catch (err) {
+    console.error("❌ Failed to save users:", err.message);
+  }
+};
+
 // Load users
 let users = [];
 try {
   if (fs.existsSync(usersFile)) {
     const data = fs.readFileSync(usersFile, "utf-8");
     users = JSON.parse(data || "[]");
-    console.log(`📂 Loaded ${users.length} users from DB/user.json`);
+    users = users.map(ensureUserStats);
+    console.log(`Loaded ${users.length} users from DB/user.json`);
   }
 } catch (err) {
-  console.error("❌ Failed to load users:", err.message);
+  console.error("Failed to load users:", err.message);
 }
 
 // Login route
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
-  console.log("📥 Incoming login request:", { username, password });
+  console.log(" Incoming login request:", { username, password });
 
   if (!username || !password) {
-    console.warn("⚠️ Missing credentials in request");
+    console.warn("Missing credentials in request");
     return res
       .status(400)
       .json({ success: false, message: "Missing credentials" });
@@ -45,10 +64,10 @@ app.post("/login", (req, res) => {
   );
 
   if (user) {
-    console.log(`✅ Login successful for user: ${username}`);
+    console.log(`Login successful for user: ${username}`);
     res.json({ success: true, message: "Login successful", user });
   } else {
-    console.warn(`❌ Invalid login attempt for username: ${username}`);
+    console.warn(`Invalid login attempt for username: ${username}`);
     res.status(401).json({ success: false, message: "Invalid credentials" });
   }
 });
@@ -65,7 +84,7 @@ const pool = new Pool({
 // Test DB connection once
 pool.connect()
   .then(() => console.log("Connected to PostgreSQL database"))
-  .catch((err) => console.error("❌ Failed to connect to DB:", err.message));
+  .catch((err) => console.error("Failed to connect to DB:", err.message));
 
 // Route to fetch table data
 app.get("/api/table/:tableName", async (req, res) => {
@@ -74,19 +93,19 @@ app.get("/api/table/:tableName", async (req, res) => {
   console.log(`Incoming request for table: "${tableName}"`);
 
   try {
-    // ⚠️ Validate table name to avoid SQL injection
+    // Validate table name to avoid SQL injection
     if (!/^[a-zA-Z0-9_]+$/.test(tableName)) {
-      console.warn(`⚠️ Invalid table name received: "${tableName}"`);
+      console.warn(`Invalid table name received: "${tableName}"`);
       return res.status(400).json({ error: "Invalid table name" });
     }
 
-    console.log(`🔎 Executing query: SELECT * FROM ${tableName} LIMIT 100`);
+    console.log(`Executing query: SELECT * FROM ${tableName} LIMIT 100`);
     const result = await pool.query(`SELECT * FROM ${tableName} LIMIT 100`);
 
-    console.log(`✅ Query successful. Rows returned: ${result.rowCount}`);
+    console.log(`Query successful. Rows returned: ${result.rowCount}`);
     res.json(result.rows);
   } catch (err) {
-    console.error(`❌ DB Error while fetching "${tableName}":`, err.message);
+    console.error(` DB Error while fetching "${tableName}":`, err.message);
     res.status(500).json({ error: "Database query failed" });
   }
 });
@@ -105,7 +124,70 @@ app.post("/api/query/:tableName", async (req, res) => {
 });
 
 
+app.post("/validate-output", async (req, res) => {
+    const { query } = req.body;
+
+    try {
+        const result = await pool.query(query);
+
+        res.json(result.rows);
+    } catch (err) {
+        res.status(400).json({
+            error: err.message,
+        });
+    }
+});
+
+// Update user stats after a completed run
+const updateUserStats = ({ username, scoreIncrement = 0, solvedIncrement = 0 }) => {
+  const user = users.find((u) => u.username === username);
+  if (!user) return null;
+
+  user.score += scoreIncrement;
+  user.gamesPlayed += scoreIncrement > 0 || solvedIncrement > 0 ? 1 : 0;
+  user.problemsSolved += solvedIncrement;
+  user.accuracy = user.gamesPlayed > 0 ? Math.round((user.problemsSolved / user.gamesPlayed) * 100) : 0;
+  user.streak = user.streak + 1;
+  user.xp += scoreIncrement;
+
+  saveUsers();
+  return user;
+};
+
+app.post("/user/update-stats", (req, res) => {
+  const { username, scoreIncrement, solvedIncrement } = req.body;
+
+  if (!username) {
+    return res.status(400).json({ error: "Missing username" });
+  }
+
+  const user = updateUserStats({ username, scoreIncrement, solvedIncrement });
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  return res.json({ success: true, user });
+});
+
+app.get("/leaderboard", (req, res) => {
+  const leaderboard = [...users]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10)
+    .map((user) => ({
+      username: user.username,
+      score: user.score,
+      gamesPlayed: user.gamesPlayed,
+      problemsSolved: user.problemsSolved,
+      accuracy: user.accuracy,
+      streak: user.streak,
+      xp: user.xp,
+    }));
+
+  res.json(leaderboard);
+});
+
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

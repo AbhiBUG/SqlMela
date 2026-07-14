@@ -1,0 +1,7 @@
+  [{
+    "game": "Query",
+    "qn": 1,
+    "question": "create table classes",
+    "arguments": "select * from students where age = 15;",
+    "solution": ""
+  }]

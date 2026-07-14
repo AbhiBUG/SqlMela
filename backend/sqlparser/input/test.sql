@@ -188,3 +188,29 @@ SELECT
     (SELECT COUNT(*) FROM all_employees) as total_employees
 FROM all_employees
 WHERE current_salary > (SELECT AVG(salary) FROM all_employees);
+
+
+
+UPDATE student
+SET course = 'BTech'
+WHERE id = 1;
+
+INSERT INTO topper_students
+SELECT * FROM students
+WHERE marks = (SELECT MAX(marks) FROM students);
+
+UPDATE employees
+SET salary = salary + 5000
+WHERE salary < (SELECT AVG(salary) FROM employees);
+
+DELETE FROM employees
+WHERE salary < (SELECT MIN(salary) FROM employees WHERE department_id = 3);
+
+
+CREATE TABLE rich_employees AS
+SELECT * FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+DELETE FROM customers
+WHERE id IN (SELECT customer_id FROM orders GROUP BY customer_id HAVING COUNT(*) = 0);
+

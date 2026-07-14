@@ -23,6 +23,7 @@ class Lexer:
             elif char == ')': self.add_token(TokenType.RPAREN, ')')
             elif char == '*': self.add_token(TokenType.ASTERISK, '*')
             elif char == ',': self.add_token(TokenType.COMMA, ',')
+            elif char == '.': self.add_token(TokenType.DOT, '.')
             elif char == ';': self.add_token(TokenType.SEMICOLON, ';')
             elif char == '=': self.add_token(TokenType.EQUALS, '=')
             elif char == '>': self.add_token(TokenType.GREATER, '>')

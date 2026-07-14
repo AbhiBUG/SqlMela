@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { FiLogOut, FiSettings, FiUser } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
-const NavBar = ({ user }) => {
+const NavBar = ({ user, handleLogout }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const displayName = typeof user === "string" ? user : user?.username || "Guest";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -17,10 +19,18 @@ const NavBar = ({ user }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+const navigate = useNavigate();
+
+const Logout = ()=>{
+  handleLogout();
+  // localStorage.clear();
+  navigate('/');
+}
+
   return (
     <nav
       className="fixed top-0 left-0 w-full flex items-center justify-between 
-      px-6 py-3 bg-white border-b border-gray-200 shadow-md z-50"
+      px-6 py-1 bg-white  shadow-md z-50"
     >
       {/* Left: Brand / Logo */}
       <div className="flex items-center space-x-2">
@@ -33,14 +43,14 @@ const NavBar = ({ user }) => {
       {/* Right: User Info + Dropdown */}
       <div className="relative flex items-center space-x-3" ref={dropdownRef}>
         {/* Username badge (hidden on small screens) */}
-        <span className="hidden sm:inline px-3 py-1 rounded-full border-2 font-semibold text-sm shadow-sm">
-          {user || "Guest"}
+        <span className="hidden sm:inline  py-1   font-bold text-sm shadow-sm hover:border-orange-500 hover:text-orange-500">
+          {displayName}
         </span>
 
         {/* User Icon */}
         <AiOutlineUser
           onClick={() => setOpen(!open)}
-          className="size-9 p-1.5 border-2 border-gray-400 rounded-full cursor-pointer 
+          className="size-9 p-1.5 border border-base rounded-full cursor-pointer 
           hover:border-orange-500 hover:text-orange-500 transition duration-300 shadow-sm"
         />
 
@@ -50,14 +60,14 @@ const NavBar = ({ user }) => {
             className="absolute right-0 top-12 w-48 bg-white rounded-xl shadow-lg border border-gray-200 animate-fadeIn z-50"
           >
             <ul className="py-2">
-              <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 cursor-pointer transition">
+              <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 cursor-pointer transition" onClick={()=>navigate('/profile')}>
                 <FiUser className="text-gray-600" /> Profile
               </li>
               <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 cursor-pointer transition">
                 <FiSettings className="text-gray-600" /> Settings
               </li>
-              <li className="flex items-center gap-2 px-4 py-2 hover:bg-red-50 text-red-600 cursor-pointer transition">
-                <FiLogOut /> Logout
+              <li className="flex items-center gap-2 px-4 py-2 hover:bg-red-50 text-red-600 cursor-pointer transition" onClick={()=>Logout()}>
+                <FiLogOut/> Logout
               </li>
             </ul>
           </div>

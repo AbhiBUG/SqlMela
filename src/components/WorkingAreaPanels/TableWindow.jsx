@@ -10,7 +10,7 @@ export default function TableWindow({ tableName }) {
 
     setLoading(true);
     setError(null);
-
+    // console.log(tableName);
     fetch(`http://localhost:5000/api/table/${tableName}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch table data");
@@ -21,6 +21,7 @@ export default function TableWindow({ tableName }) {
       .finally(() => setLoading(false));
   }, [tableName]);
 
+  // console.log(tableName);
   return (
     <div className="border p-4 shadow bg-black rounded-xl overflow-y-auto">
      
@@ -30,7 +31,7 @@ export default function TableWindow({ tableName }) {
 
       {!loading && !error && rows.length > 0 && (
         <div className="overflow-x-auto overflow-y-auto max-h-[70vh] rounded-lg border border-gray-700">
-          <table className="table-auto w-full border-collapse text-sm sm:text-base">
+          <table className="table-auto w-full border-collapse text-[10px] ">
             <thead className="bg-gray-800 sticky top-0 z-10">
               <tr>
                 {Object.keys(rows[0]).map((col) => (

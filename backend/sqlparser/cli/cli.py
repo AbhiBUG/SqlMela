@@ -55,6 +55,7 @@ def main():
     sources = []
     if args.query:
         sources.append(("Query Argument", args.query))
+        #print(args.query)
     
     if args.file:
         for fpath in args.file:
@@ -82,7 +83,7 @@ def main():
         print("Provide --query or --file")
         print("Provide --query, --file, or --folder")
         return
-
+    print(sources)
     full_report = []
     results = []
     print("\n--- VALIDATION RESULT ---")
@@ -90,6 +91,7 @@ def main():
     for source_name, sql_content in sources:
         statements = split_statements(sql_content)
         for idx, stmt in enumerate(statements):
+            print(stmt)
             result = validate_sql(stmt, dialect=args.dialect)
             output_text = format_text(result)
             
