@@ -101,16 +101,10 @@
     "arguments": "select * from students where name like 'A%';",
     "solution": ""
   },
-  {
-    "game": "FillContainer",
-    "qn": 13,
-    "question": "Fill the SQL blanks",
-    "arguments": ["SELECT", "FROM", "WHERE", "*", "students", "age = 20"],
-    "solution": "SELECT * FROM students WHERE age = 20"
-  },
+ 
   {
     "game": "Query",
-    "qn": 14,
+    "qn": 13,
     "question": "Find maximum marks",
     "arguments": "select max(marks) from students;",
     "solution": ""
