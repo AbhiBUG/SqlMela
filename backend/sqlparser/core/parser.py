@@ -45,64 +45,17 @@ class Parser:
     # =========================
 
     def select_stmt(self):
-        # Old simple implementation (kept commented for easy rollback):
-        # self.advance()
-        # self.consume(TokenType.INTO, "Expected 'INTO'")
-        # self.consume(TokenType.IDENTIFIER, "Expected table name")
-        # self.consume(TokenType.VALUES, "Expected 'VALUES'")
-        # self.consume(TokenType.LPAREN, "Expected '('")
-        # while not self.check(TokenType.RPAREN) and not self.is_at_end():
-        #     self.advance()
-        #     self.match(TokenType.COMMA)
-        # return self.consume(TokenType.RPAREN, "Expected ')'")
+        self.advance()  # consume SELECT
 
-        # New: support optional column list: INSERT INTO tbl (c1, c2) VALUES (...)
-        self.advance()  # consume INSERT
-        if not self.consume(TokenType.INTO, "Expected 'INTO'"):
+        # Columns
+        if not self.column_item():
             return False
 
-        if not self.consume(TokenType.IDENTIFIER, "Expected table name"):
-            return False
-
-        # Optional column list
-        if self.match(TokenType.LPAREN):
-            # expect one or more identifiers separated by commas
-            if not self.consume(TokenType.IDENTIFIER, "Expected column name in column list"):
+        while self.match(TokenType.COMMA):
+            if not self.column_item():
+                self.errors.append(
+                    "Expected identifier or subquery after comma")
                 return False
-            while self.match(TokenType.COMMA):
-                if not self.consume(TokenType.IDENTIFIER, "Expected column name after comma"):
-                    return False
-            if not self.consume(TokenType.RPAREN, "Expected ')' after column list"):
-                return False
-
-        # VALUES clause
-        if not self.consume(TokenType.VALUES, "Expected 'VALUES'"):
-            return False
-
-        if not self.consume(TokenType.LPAREN, "Expected '(' before VALUES"):
-            return False
-
-        # Accept value tokens until closing paren (simple literal/identifier consumption)
-        while not self.check(TokenType.RPAREN) and not self.is_at_end():
-            # allow strings, numbers, identifiers, or nested parens
-            if self.check(TokenType.STRING) or self.check(TokenType.NUMBER) or self.check(TokenType.IDENTIFIER) or self.check(TokenType.BACKTICK_IDENTIFIER):
-                self.advance()
-            elif self.match(TokenType.LPAREN):
-                # consume until matching RPAREN (simple nesting)
-                depth = 1
-                while depth > 0 and not self.is_at_end():
-                    if self.match(TokenType.LPAREN):
-                        depth += 1
-                    elif self.match(TokenType.RPAREN):
-                        depth -= 1
-                    else:
-                        self.advance()
-            else:
-                # consume commas or other tokens
-                if not self.match(TokenType.COMMA):
-                    self.advance()
-
-        return self.consume(TokenType.RPAREN, "Expected ')' after VALUES list")
 
         # FROM
         if not self.consume(TokenType.FROM, "Missing required 'FROM' clause"):
@@ -323,52 +276,10 @@ class Parser:
         return True
 
     def create_stmt(self):
-        # Old minimal implementation (commented for rollback):
-        # self.advance()
-        # self.consume(TokenType.TABLE, "Expected 'TABLE'")
-        # self.consume(TokenType.IDENTIFIER, "Expected table name")
-        # return self.consume(TokenType.LPAREN, "Expected '('")
-
-        # New: parse CREATE TABLE <name> ( column_def [, column_def ...] )
-        self.advance()  # consume CREATE
-        if not self.consume(TokenType.TABLE, "Expected 'TABLE'"):
-            return False
-
-        if not self.consume(TokenType.IDENTIFIER, "Expected table name"):
-            return False
-
-        if not self.consume(TokenType.LPAREN, "Expected '(' after table name"):
-            return False
-
-        # Parse one or more column definitions
-        while not self.check(TokenType.RPAREN) and not self.is_at_end():
-            # Column name
-            if not self.consume(TokenType.IDENTIFIER, "Expected column name in CREATE TABLE"):
-                return False
-
-            # Optional type (e.g., VARCHAR, INT)
-            if self.check(TokenType.IDENTIFIER):
-                self.advance()
-                # Optional type size: VARCHAR(20)
-                if self.match(TokenType.LPAREN):
-                    # accept numbers and commas inside type params
-                    while not self.check(TokenType.RPAREN) and not self.is_at_end():
-                        self.advance()
-                        # allow commas between size params
-                        self.match(TokenType.COMMA)
-                    if not self.consume(TokenType.RPAREN, "Expected ')' in type declaration"):
-                        return False
-
-            # Optional column constraints: collect tokens until comma or closing paren
-            while not self.check(TokenType.COMMA) and not self.check(TokenType.RPAREN) and not self.is_at_end():
-                self.advance()
-
-            # If comma, consume and continue to next column
-            if self.match(TokenType.COMMA):
-                continue
-
-        # Expect closing paren
-        return self.consume(TokenType.RPAREN, "Expected ')' to close CREATE TABLE column list")
+        self.advance()
+        self.consume(TokenType.TABLE, "Expected 'TABLE'")
+        self.consume(TokenType.IDENTIFIER, "Expected table name")
+        return self.consume(TokenType.LPAREN, "Expected '('")
 
     def delete_stmt(self):
         self.advance()
