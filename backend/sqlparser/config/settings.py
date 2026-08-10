@@ -123,11 +123,16 @@ STATIC_URL = 'static/'
 
 
 # CORS SETTINGS
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+# ]
+#replaced with 
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "https://your-react-frontend.onrender.com",
 ]
 
 # Optional (only for development)
-CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_ALL_ORIGINS = True
