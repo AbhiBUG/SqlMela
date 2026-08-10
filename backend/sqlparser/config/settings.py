@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-0*s2fi!4v468i2g_w4r8l(t#s!*&h(8kv(-84ww8$c5iswzhsq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = [
+    "djangobackend-bc3u.onrender.com",
+]
 
 # Application definition
 
@@ -128,8 +131,9 @@ STATIC_URL = 'static/'
 # ]
 #replaced with 
 
+
 CORS_ALLOWED_ORIGINS = [
-    "https://djangobackend-bc3u.onrender.com",
+    "https://sqlmelafrontend.onrender.com",
 ]
 
 # Optional (only for development)
