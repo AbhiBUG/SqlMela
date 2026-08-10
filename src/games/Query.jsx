@@ -6,7 +6,7 @@ const Query = ({ question,argument,solution,setScore,playButton,setResult }) => 
   // console.log(sql);
   const validateSQL = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/validate/", {
+      const response = await fetch("https://djangobackend-bc3u.onrender.com/api/validate/", {   //localhost:8000 replaced
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -26,7 +26,7 @@ const [actualTable,setActualTable] = useState(null);
 
   const validateSQL = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/validate-output", {
+      const response = await fetch("https://djangobackend-bc3u.onrender.com/validate-output", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

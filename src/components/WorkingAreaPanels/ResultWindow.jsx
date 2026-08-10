@@ -5,7 +5,7 @@ export default function QueryResult({ tableName, queryResult }) {
 
   const fetchData = async (query) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/query/${tableName}`, {
+      const res = await fetch(`https://sqlmela.onrender.com/api/query/${tableName}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
