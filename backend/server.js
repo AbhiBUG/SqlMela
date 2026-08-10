@@ -73,12 +73,21 @@ app.post("/login", (req, res) => {
 });
 
 // PostgreSQL connection
+// const pool = new Pool({
+//   user: "postgres",       // change this
+//   host: "localhost",      // or your DB host
+//   database: "sqlMela",    // your DB name
+//   password: "1234",       // change this
+//   port: 5432,             // default postgres port
+// });
+
+
+//Hosted
 const pool = new Pool({
-  user: "postgres",       // change this
-  host: "localhost",      // or your DB host
-  database: "sqlMela",    // your DB name
-  password: "1234",       // change this
-  port: 5432,             // default postgres port
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 // Test DB connection once
