@@ -129,7 +129,7 @@ STATIC_URL = 'static/'
 #replaced with 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://your-react-frontend.onrender.com",
+    "https://djangobackend-bc3u.onrender.com",
 ]
 
 # Optional (only for development)
