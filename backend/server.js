@@ -67,7 +67,7 @@ app.post("/login", (req, res) => {
   const user = users.find(
     (u) => u.username === username && u.password === password
   );
-  console.log(user);
+  
   if (user) {
     console.log(`Login successful for user: ${username}`);
     req.session.user = {id:user.id,username:user.username,fullname:user.name};
@@ -125,6 +125,14 @@ app.get("/api/table/:tableName", async (req, res) => {
   }
 });
 
+// app.get("/session", (req, res) => {
+//     console.log("Session:", req.session);
+
+//     res.json({
+//         sessionID: req.sessionID,
+//         user: req.session.user || null
+//     });
+// });
 
 app.post("/api/query/:tableName",checkLoggedIn, async (req, res) => {
   const { tableName } = req.params;
