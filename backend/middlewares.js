@@ -1,4 +1,4 @@
-exports.checkLoggedIn = (req,res,next)=>{
+export const checkLoggedIn = (req,res,next)=>{
     if(req.session.user)
     {
         next()

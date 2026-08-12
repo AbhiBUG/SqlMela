@@ -3,11 +3,11 @@ import cors from "cors";
 import fs from "fs";
 import path from "path";
 import pkg from "pg";
+import session from 'express-session';
 const { Pool } = pkg;
-const {checkLoggedIn} = require('./middlewares')
+import {checkLoggedIn} from './middlewares.js'
 const app = express();
 const PORT = 5000;
-const session = require('express-session')
 // Middleware
 app.use(cors());
 app.use(express.json());
