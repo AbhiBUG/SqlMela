@@ -61,18 +61,16 @@ app.post("/login", (req, res) => {
 
   if (!username || !password) {
     console.warn("Missing credentials in request");
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing credentials" });
+    return res.status(400).json({ success: false, message: "Missing credentials" });
   }
 
   const user = users.find(
     (u) => u.username === username && u.password === password
   );
-
+  console.log(user);
   if (user) {
     console.log(`Login successful for user: ${username}`);
-    req.session.user = {iD:user.id,username:user.username,fullname:user.name}
+    req.session.user = {id:user.id,username:user.username,fullname:user.name};
     res.json({ success: true, message: "Login successful", user });
   } else {
     console.warn(`Invalid login attempt for username: ${username}`);
