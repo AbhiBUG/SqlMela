@@ -18,6 +18,22 @@ app.use(express.urlencoded({extended:false}))
 // Path to users file
 const usersFile = path.resolve("DB/user.json");
 
+app.use(session({
+  secret : 'my_session_secret',
+  resave:true,
+  saveUninitialized:false,
+  name:'manfra.io',
+
+    cookie: {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60
+    }
+}))
+
+
+
 const ensureUserStats = (user) => ({
   score: 0,
   gamesPlayed: 0,
@@ -49,19 +65,6 @@ try {
   console.error("Failed to load users:", err.message);
 }
 
-app.use(session({
-  secret : 'my_session_secret',
-  resave:true,
-  saveUninitialized:false,
-  name:'manfra.io',
-
-    cookie: {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 1000 * 60 * 60
-    }
-}))
 
 // Login route
 app.post("/login", (req, res) => {
@@ -81,7 +84,16 @@ app.post("/login", (req, res) => {
   if (user) {
     console.log(`Login successful for user: ${username}`);
     req.session.user = {id:user.id,username:user.username,fullname:user.name};
-    res.json({ success: true, message: "Login successful", user });
+
+        req.session.save((err) => {
+        if (err) {
+            console.error("Session save error:", err);
+        }
+        console.log("Session saved successfully");
+        res.json({ success: true, message: "Login successful", user });
+      });
+    
+    
   } else {
     console.warn(`Invalid login attempt for username: ${username}`);
     res.status(401).json({ success: false, message: "Invalid credentials" });
