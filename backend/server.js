@@ -1,17 +1,17 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import cors from "cors";
 import fs from "fs";
 import path from "path";
 import pkg from "pg";
 const { Pool } = pkg;
-
+const {checkLoggedIn} = require('./middlewares')
 const app = express();
 const PORT = 5000;
-
+const session = require('express-session')
 // Middleware
 app.use(cors());
 app.use(express.json());
-
+app.use(express.urlencoded({extended:false}))
 // Path to users file
 const usersFile = path.resolve("DB/user.json");
 
@@ -46,6 +46,13 @@ try {
   console.error("Failed to load users:", err.message);
 }
 
+app.use(session({
+  secret : 'my_session_secret',
+  resave:true,
+  saveUninitialized:false,
+  name:'manfra.io'
+}))
+
 // Login route
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -65,6 +72,7 @@ app.post("/login", (req, res) => {
 
   if (user) {
     console.log(`Login successful for user: ${username}`);
+    req.session.user = {iD:user.id,username:user.username,fullname:user.name}
     res.json({ success: true, message: "Login successful", user });
   } else {
     console.warn(`Invalid login attempt for username: ${username}`);
@@ -120,7 +128,7 @@ app.get("/api/table/:tableName", async (req, res) => {
 });
 
 
-app.post("/api/query/:tableName", async (req, res) => {
+app.post("/api/query/:tableName",checkLoggedIn, async (req, res) => {
   const { tableName } = req.params;
   const { query } = req.body;
 
