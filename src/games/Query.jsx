@@ -8,6 +8,7 @@ const Query = ({ question,argument,solution,setScore,playButton,setResult }) => 
     try {
       const response = await fetch("https://djangobackend-bc3u.onrender.com/api/validate/", {   //localhost:8000 replaced
         method: "POST",
+         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
