@@ -9,7 +9,10 @@ import {checkLoggedIn} from './middlewares.js'
 const app = express();
 const PORT = 5000;
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: "https://sqlmelafrontend.onrender.com/",
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 // Path to users file
@@ -50,7 +53,14 @@ app.use(session({
   secret : 'my_session_secret',
   resave:true,
   saveUninitialized:false,
-  name:'manfra.io'
+  name:'manfra.io',
+
+    cookie: {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60
+    }
 }))
 
 // Login route
