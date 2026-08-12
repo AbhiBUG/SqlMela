@@ -10,7 +10,7 @@ const app = express();
 const PORT = 5000;
 // Middleware
 app.use(cors({
-    origin: "https://sqlmelafrontend.onrender.com/",
+    origin: "https://sqlmelafrontend.onrender.com",
     credentials: true
 }));
 app.use(express.json());
