@@ -19,7 +19,7 @@ export default function GamePanel({ tableName,setValidatorResult }) {
      const [refresh, setRefresh] = useState(false); //refresh Button
   const [isModalOpen, setIsModalOpen] = useState(false); //modal
 
-  const [result,setValidatorResult] = useState(null);
+  const [queryresult,setQueryResult] = useState(null);
   const [score, setScore] = useState(0);  //to be passed in modal
  // Fetch JSON dynamically based on tableName
   useEffect(() => {
@@ -38,10 +38,10 @@ export default function GamePanel({ tableName,setValidatorResult }) {
 
  
 useEffect(() => {
-  if (result) {
-    setValidatorResult({ ...result });
+  if (queryresult) {
+    setQueryResult({ ...queryresult });
   }
-}, [result, setValidatorResult]);
+}, [queryresult, setQueryResult]);
 
   const currentGame = questions[currentno];
 const [questionsList,openQuestionsList] = useState(false);
@@ -73,18 +73,18 @@ const handleNext = () => {
 const handlePrevious = () =>{
    setCurrentno((prev) => Math.max(prev - 1, 0));
                           
-  setValidatorResult(null); 
+  setQueryResult(null); 
     setplayButton(0); 
     setScore(0); 
   
 }
 
   const validateQueryResult = () => {
-  if (!currentGame || !result) return false;
+  if (!currentGame || !queryresult) return false;
 
   const expected = currentGame.solution;
 
-  return JSON.stringify(result) === JSON.stringify(expected);
+  return JSON.stringify(queryresult) === JSON.stringify(expected);
 };
 
 const handleplay = () => {
@@ -99,7 +99,7 @@ const handleplay = () => {
   }
 
   console.log("Button Clicked");
-  console.log("Result : " + JSON.stringify(result));
+  console.log("Result : " + JSON.stringify(queryresult));
 };
 
 
