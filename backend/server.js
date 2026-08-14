@@ -14,7 +14,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
-app.set("trust proxy", 1);
+app.set("trust proxy", 1);  //for render
 app.use(express.urlencoded({extended:false}))
 // Path to users file
 const usersFile = path.resolve("DB/user.json");
@@ -158,6 +158,7 @@ app.get("/api/table/:tableName", async (req, res) => {
 // });
 
 app.post("/api/query/:tableName",checkLoggedIn, async (req, res) => {
+  console.log("Proceeding with data retrieval");
   const { tableName } = req.params;
   const { query } = req.body;
 
