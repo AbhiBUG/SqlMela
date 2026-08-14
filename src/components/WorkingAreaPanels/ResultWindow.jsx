@@ -59,7 +59,7 @@ export default function QueryResult({ tableName, validatorResult }) {
   }
 
   return (
-    (queryExecuting && <div className="flex flex-col items-center justify-center bg-primary/50 h-full">
+    <div className="flex flex-col items-center justify-center bg-primary/50 h-full">
       <h2 className=" font-bold text-white">Valid Syntax!</h2>
 
       {queryExecuting ? (
@@ -112,6 +112,6 @@ export default function QueryResult({ tableName, validatorResult }) {
       ) : (
         <h2 className="text-yellow-400 font-bold">No rows returned.</h2>
       )}
-    </div>)
+    </div>
   );
 }
