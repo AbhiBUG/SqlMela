@@ -2,116 +2,195 @@ import React, { useState, useEffect } from "react";
 
 export default function QueryResult({ tableName, validatorResult }) {
   const [result, setResult] = useState([]);
-  const [queryExecuting,setQueryExecuting] = useState(false);
+  const [queryExecuting, setQueryExecuting] = useState(false);
+  const [comparisonResult, setComparisonResult] = useState(null);
 
-  const fetchData = async (query) => {
-    try {
-      setQueryExecuting(true);
-      setResult(null); // Clear previous results before fetching new data
-      const res = await fetch(`https://sqlmela.onrender.com/api/query/${tableName}`, {
+  const normalizeRows = (rows = []) =>
+    rows.map((row) => Object.values(row));
+
+  const areRowsEquivalent = (a = [], b = []) => {
+    if (a.length !== b.length) return false;
+
+    return (
+      JSON.stringify(normalizeRows(a)) ===
+      JSON.stringify(normalizeRows(b))
+    );
+  };
+
+  const fetchQueryResult = async (query) => {
+    const res = await fetch(
+      `https://sqlmela.onrender.com/api/query/${tableName}`,
+      {
         method: "POST",
-        credentials : "include",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ query }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Query execution failed");
+    }
+
+    return data;
+  };
+
+  const validateOutput = async () => {
+    try {
+      setQueryExecuting(true);
+      setComparisonResult(null);
+
+      const userQuery =
+        validatorResult?.results?.[0]?.statement;
+
+      const solutionQuery =
+        validatorResult?.solution;
+
+      if (!userQuery || !solutionQuery) return;
+
+      const userRows = await fetchQueryResult(userQuery);
+
+      const solutionRows = await fetchQueryResult(solutionQuery);
+
+      setResult(userRows);
+
+      const matched = areRowsEquivalent(
+        userRows,
+        solutionRows
+      );
+
+      setComparisonResult({
+        matched,
+        message: matched
+          ? "Correct Answer"
+          : "Incorrect Output",
+      });
+    } catch (err) {
+      console.error(err);
+
+      setComparisonResult({
+        matched: false,
+        message: err.message,
       });
 
-      const data = await res.json();
-      console.log("Fetched Data:", data);
-      setResult(data);
-    }  catch (err) {
-    console.error(err);
-    setResult([]);
-  } finally {
-    setQueryExecuting(false);
-  }
-};
+      setResult([]);
+    } finally {
+      setQueryExecuting(false);
+    }
+  };
 
   useEffect(() => {
-    const isValid = validatorResult?.results?.[0]?.result?.valid;
-    const query = validatorResult?.results?.[0]?.statement;
-      const solutionQuery = validatorResult?.solution;
-    if (isValid && query) {
-      fetchData(query);
-       // Clear previous results before fetching new data
+    const isValid =
+      validatorResult?.results?.[0]?.result?.valid;
+
+    if (isValid) {
+      validateOutput();
     }
   }, [validatorResult, tableName]);
 
-  // console.log(validatorResult);
-
-  if (!validatorResult || !validatorResult?.results || validatorResult.results.length === 0) {
+  if (
+    !validatorResult ||
+    !validatorResult.results ||
+    validatorResult.results.length === 0
+  ) {
     return (
-      <div className="border shadow bg-primary/50 p-4 flex flex-col h-full">
-        <p className="text-gray-500 italic">No Results</p>
+      <div className="border shadow bg-primary/50 p-4">
+        No Results
       </div>
     );
   }
 
-  const isValid = validatorResult?.results?.[0]?.result?.valid;
-  const errors = validatorResult?.results?.[0]?.result?.errors;
+  const isValid =
+    validatorResult?.results?.[0]?.result?.valid;
+
+  const errors =
+    validatorResult?.results?.[0]?.result?.errors;
 
   if (!isValid) {
     return (
-      <div className="border shadow bg-primary/50 p-4 flex flex-col h-full">
-        <h2 className="text-red-600 font-bold">Invalid SQL Syntax</h2>
-        <p>Error: {Array.isArray(errors) ? errors.join(", ") : errors}</p>
+      <div className="border shadow bg-primary/50 p-4">
+        <h2 className="text-red-500 font-bold">
+          Invalid SQL Syntax
+        </h2>
+
+        <p>
+          {Array.isArray(errors)
+            ? errors.join(", ")
+            : errors}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-primary/50 h-full">
-      <h2 className=" font-bold text-white">Valid Syntax!</h2>
+    <div className="flex flex-col items-center bg-primary/50 h-full">
+
+      <h2 className="text-green-400 font-bold">
+        Valid Syntax
+      </h2>
 
       {queryExecuting ? (
-  <h2 className="text-white font-bold">
-    Executing Query...
-  </h2>
-) : result === null ? "Hello World" : result.length > 0 ? (
+        <h2 className="text-white mt-4">
+          Executing Query...
+        </h2>
+      ) : (
         <>
-          <h2 className="text-white font-bold">
-            Query Executed Successfully!
-          </h2>
-          <div className="p-3 overflow-x-auto">
-            <table className="table-auto w-full border-collapse border border-gray-300 text-[10px]">
-              <thead>
-                <tr>
-                  {Object.keys(result[0]).map((col) => (
-                    <th
-                      key={col}
-                      className="border border-gray-600 px-4 py-2 text-left text-white font-semibold bg-gray-600 border-white"
-                    >
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
+          {comparisonResult && (
+            <h2
+              className={`font-bold ${
+                comparisonResult.matched
+                  ? "text-green-400"
+                  : "text-red-400"
+              }`}
+            >
+              {comparisonResult.message}
+            </h2>
+          )}
 
-              <tbody>
-                {result.map((row, i) => (
-                  <tr
-                    key={i}
-                    className={`${
-                      i % 2 === 0 ? "bg-gray-900" : "bg-gray-800"
-                    } hover:bg-gray-700 transition`}
-                  >
-                    {Object.values(row).map((val, j) => (
-                      <td
-                        key={j}
-                        className="border border-gray-600 px-4 py-2 text-gray-200 break-words max-w-[250px]"
+          {result?.length > 0 ? (
+            <div className="p-3 overflow-x-auto w-full">
+              <table className="table-auto w-full border-collapse border border-gray-300 text-[10px]">
+
+                <thead>
+                  <tr>
+                    {Object.keys(result[0]).map((col) => (
+                      <th
+                        key={col}
+                        className="border px-4 py-2 bg-gray-700 text-white"
                       >
-                        {String(val)}
-                      </td>
+                        {col}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody>
+                  {result.map((row, i) => (
+                    <tr key={i}>
+                      {Object.values(row).map((val, j) => (
+                        <td
+                          key={j}
+                          className="border px-4 py-2 text-white"
+                        >
+                          {String(val)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+
+              </table>
+            </div>
+          ) : (
+            <h2 className="text-yellow-400">
+              No rows returned.
+            </h2>
+          )}
         </>
-      ) : (
-        <h2 className="text-yellow-400 font-bold">No rows returned.</h2>
       )}
     </div>
   );
