@@ -10,8 +10,7 @@ export default function TableWindow({ tableName }) {
 
     setLoading(true);
     setError(null);
-    // console.log(tableName);
-    fetch(`https://sqlmela.onrender.com/api/table/${tableName}`,{credentials: "include"}) //replaced localhost:5000
+    fetch(`https://sqlmela.onrender.com/api/table/${tableName}`,{credentials: "include"}) 
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch table data");
         return res.json();
@@ -21,7 +20,6 @@ export default function TableWindow({ tableName }) {
       .finally(() => setLoading(false));
   }, [tableName]);
 
-  // console.log(tableName);
   return (
     <div className="border p-4 shadow bg-black rounded-xl overflow-y-auto">
      

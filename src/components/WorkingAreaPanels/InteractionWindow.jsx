@@ -39,13 +39,10 @@ export default function GamePanel({ tableName,setQueryResult }) {
  
 useEffect(() => {
   if (result) {
-    setQueryResult({ ...result }); // force new reference
+    setQueryResult({ ...result });
   }
 }, [result, setQueryResult]);
 
-// console.log("GamePanel queryResult:", result);
-
-  // Get current game
   const currentGame = questions[currentno];
 const [questionsList,openQuestionsList] = useState(false);
 
@@ -67,18 +64,18 @@ useEffect(() => {
 
 const handleNext = () => {
     setCurrentno((prev) => Math.min(prev + 1, questions.length - 1));
-    setQueryResult(null); // Clear previous result when moving to next question
-    setplayButton(0); // Reset button state for new question
-    setScore(0); // Reset score for new question
+    setQueryResult(null); 
+    setplayButton(0); 
+    setScore(0);
   
 }
 
 const handlePrevious = () =>{
    setCurrentno((prev) => Math.max(prev - 1, 0));
                           
-  setQueryResult(null); // Clear previous result when moving to next question
-    setplayButton(0); // Reset button state for new question
-    setScore(0); // Reset score for new question
+  setQueryResult(null); 
+    setplayButton(0); 
+    setScore(0); 
   
 }
 
@@ -156,10 +153,9 @@ if (questions.length === 0) {
 
      <div className="border p-4 shadow  h-screen flex flex-col items-center overflow-y-auto overflow-hidden text-white w-full ">
   {(() => {
-    // const question = questions[currentno]; //current question
     const question = questions[currentno];
     const Game = GameComponents[question.game]; 
-    // console.log(Game);
+   
     return (
       <div className="w-full">
         {Game ? (
@@ -200,9 +196,7 @@ if (questions.length === 0) {
             onClose={handleCloseModal}
             title=""
           >
-            {/* <p className="text-[70px] font-bold border-t-4 border-white mt-4 pt-4 text-center">
-              {score}/{currentGame.solution.length}
-            </p> */}
+         
 
             {score==1 ?(
             <div className="flex flex-col items-center justify-center">

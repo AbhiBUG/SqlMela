@@ -13,15 +13,6 @@ const Login = ({ setUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const togglePassword = () => setState(!state);
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      const userObj = JSON.parse(savedUser);
-      setUser(userObj);
-      navigate("/home");
-    }
-  }, [navigate, setUser]);
-
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -31,7 +22,7 @@ const Login = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      console.log(username,password);
+      // console.log(username,password);
       const res = await fetch("https://sqlmela.onrender.com/login", {
         method: "POST",
          credentials: "include",
@@ -42,10 +33,6 @@ const Login = ({ setUser }) => {
       const data = await res.json();
 
       if (res.ok) {
-        // alert("Login Successfull");
-
-        //  Save user persistently
-        localStorage.setItem("user", JSON.stringify(data.user));
 
         setUser(data.user);
         navigate("/home");

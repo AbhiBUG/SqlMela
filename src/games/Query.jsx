@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 const Query = ({ question,argument,solution,setScore,playButton,setResult }) => {
   const [sql, setSql] = useState("");
-  // const [result, setResult] = useState(null);
-  // console.log(sql);
   const validateSQL = async () => {
     try {
       const response = await fetch("https://djangobackend-bc3u.onrender.com/api/validate/", {   //localhost:8000 replaced
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -32,11 +31,6 @@ useEffect(() => {
   }
 }, [playButton]);
 
-  //   useEffect(() => {
-  //   if (result) {
-  //     setResult(result);
-  //   }
-  // }, [result]);
 
   return (
     <div className="question text-white flex flex-col items-center  h-screen">
@@ -53,15 +47,6 @@ useEffect(() => {
           onChange={(e) => setSql(e.target.value)}
         />
       </div>
-
-
-{/* 
-      {result && (
-        <div className="mt-4 bg-gray-800 p-3 w-full">
-          <pre>{JSON.stringify(result, null, 2)}</pre>
-          
-        </div>
-      )} */}
     </div>
   );
 };
