@@ -27,13 +27,9 @@ export const getTableData = async (req, res) => {
     const result = await pool.query(query);
 
     console.log(`✅ Query successful. Rows returned: ${result.rowCount}`);
-    res.json({
-      success: true,
-      rowCount: result.rowCount,
-      rows: result.rows
-    });
+ res.json(result.rows);
   } catch (err) {
-    console.error(`❌ DB Error for table "${tableName}":`, err.message);
+    console.error(` DB Error for table "${tableName}":`, err.message);
     res.status(500).json({
       success: false,
       error: "Database query failed",
@@ -73,12 +69,7 @@ export const executeQuery = async (req, res) => {
 
     console.log(`✅ Query executed successfully. Rows returned: ${result.rowCount}`);
 
-    res.json({
-      success: true,
-      rowCount: result.rowCount,
-      rows: result.rows,
-      analysis: analysis
-    });
+res.json(result.rows);
   } catch (err) {
     console.error(`❌ Query execution error:`, err.message);
     res.status(500).json({
