@@ -1,4 +1,4 @@
-export const checkLoggedIn = (req,res,next)=>{
+const checkLoggedIn = (req,res,next)=>{
      console.log("Session ID:", req.sessionID);
     console.log("Session:", req.session);
     console.log("User:", req.session.user);
@@ -13,3 +13,17 @@ export const checkLoggedIn = (req,res,next)=>{
         });
     }
 }
+
+const checkDeveloper = (req,res,next)=>
+{
+    if(req.session.user.role=="developer")
+    {
+        next()
+    }
+    else{
+        
+    }
+}
+
+
+export {checkLoggedIn,checkDeveloper}

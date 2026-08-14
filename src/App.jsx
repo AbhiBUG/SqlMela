@@ -15,6 +15,7 @@ import Login from "./pages/login.jsx";
 import Tables from "./pages/Tables.jsx";
 import TablePage from "./pages/WorkingArea.jsx";
 import Profile from "./pages/Profile.jsx";
+import Maintenance from "./pages/Maintenance.jsx";
 
 const ProtectedRoute = ({ user, children }) => {
   return user ? children : <Navigate to="/" replace />;
@@ -48,6 +49,7 @@ const App = () => {
 
         <main className="flex-1 pt-10 relative z-10">
           <Routes>
+            <Route path="/maintenance" element={<Maintenance></Maintenance>}/>
             <Route path="/" element={<Login setUser={setUser} />} />
 
             <Route

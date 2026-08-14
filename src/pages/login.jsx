@@ -32,13 +32,16 @@ const Login = ({ setUser }) => {
 
       const data = await res.json();
 
-      if (res.ok) {
-
+      if (res.ok){
+        if(data.maintenance)
+        {
+          navigate("/error");
+        }
+        else{
         setUser(data.user);
         navigate("/home");
-      } else {
-       
-         
+        }
+      } else {  
            setIsModalOpen(true);
        
         // alert("Invalid Credentials");

@@ -5,9 +5,11 @@ import path from "path";
 import pkg from "pg";
 import session from 'express-session';
 const { Pool } = pkg;
-import {checkLoggedIn} from './middlewares.js'
+import {checkLoggedIn,checkDeveloper} from './middlewares.js'
 const app = express();
 const PORT = 5000;
+
+const Maintainance = true
 // Middleware
 app.use(cors({
     origin: "https://sqlmelafrontend.onrender.com",
@@ -84,13 +86,23 @@ app.post("/login", (req, res) => {
   
   if (user) {
     console.log(`Login successful for user: ${username}`);
-    req.session.user = {id:user.id,username:user.username,fullname:user.name};
 
+    req.session.user = {id:user.id,username:user.username,fullname:user.name,role:user.role};
         req.session.save((err) => {
         if (err) {
             console.error("Session save error:", err);
         }
         console.log("Session saved successfully");
+    
+        if(Maintainance && user.role!="developer"){
+      res.json(
+        {
+          success:true,
+          maintenance : true,
+          message : "Site Under Maintence"
+        }
+    )
+  }
         res.json({ success: true, message: "Login successful", user });
       });
     
