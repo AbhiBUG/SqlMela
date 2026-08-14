@@ -33,6 +33,7 @@ export default function QueryResult({ tableName, validatorResult }) {
 
     if (isValid && query) {
       fetchData(query);
+      setResult(null); // Clear previous results before fetching new data
     }
   }, [validatorResult, tableName]);
 
@@ -66,7 +67,7 @@ export default function QueryResult({ tableName, validatorResult }) {
   <h2 className="text-white font-bold">
     Executing Query...
   </h2>
-) : result === null ? null : result.length > 0 ? (
+) : result === null ? "Hello World" : result.length > 0 ? (
         <>
           <h2 className="text-white font-bold">
             Query Executed Successfully!
