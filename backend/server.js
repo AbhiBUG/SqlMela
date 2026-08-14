@@ -4,6 +4,8 @@ import fs from "fs";
 import path from "path";
 import pkg from "pg";
 import session from 'express-session';
+import passport from "./config/passport.js";
+
 const { Pool } = pkg;
 import {checkLoggedIn,checkDeveloper} from './middlewares.js'
 const app = express();
@@ -35,6 +37,7 @@ app.use(session({
     }
 }))
 
+app.use(passport.initialize());
 
 
 const ensureUserStats = (user) => ({
@@ -95,7 +98,7 @@ app.post("/login", (req, res) => {
         console.log("Session saved successfully");
     
         if(Maintainance && user.role!="developer"){
-      res.json(
+      return res.json(
         {
           success:true,
           maintenance : true,
@@ -103,7 +106,7 @@ app.post("/login", (req, res) => {
         }
     )
   }
-        res.json({ success: true, message: "Login successful", user });
+        return res.json({ success: true, message: "Login successful", user });
       });
     
     
@@ -245,6 +248,58 @@ app.get("/leaderboard", (req, res) => {
 
   res.json(leaderboard);
 });
+
+
+
+// app.get(
+//   "/auth/github",
+//   passport.authenticate("github", {
+//     scope: [
+//       "repo",
+//       "read:user"
+//     ]
+//   })
+// );
+
+
+
+// app.get(
+//   "/auth/github/callback",
+//   passport.authenticate("github", {
+//     session: false
+//   }),
+//   async (req, res) => {
+
+//     const { profile, accessToken } =
+//       req.user;
+
+//     await pool.query(
+//       `
+//       INSERT INTO github_accounts
+//       (
+//         user_id,
+//         github_username,
+//         access_token
+//       )
+//       VALUES ($1,$2,$3)
+
+//       ON CONFLICT (user_id)
+//       DO UPDATE
+//       SET access_token = $3
+//       `,
+//       [
+//         req.session.user.id,
+//         profile.username,
+//         accessToken
+//       ]
+//     );
+
+//     res.redirect(
+//       "https://sqlmelafrontend.onrender.com/practice"
+//     );
+//   }
+// );
+
 
 // Start server
 app.listen(PORT, () => {

@@ -54,12 +54,12 @@ export default function QueryResult({ tableName, queryResult }) {
   }
 
   return (
-    <div className="">
-      <h2 className="text-accent font-bold">Valid Syntax!</h2>
+    <div className="flex flex-col items-center justify-center bg-primary/50">
+      <h2 className=" font-bold text-white">Valid Syntax!</h2>
 
       {result.length > 0 ? (
         <>
-          <h2 className="text-accent italic font-bold">
+          <h2 className="text-white font-bold">
             Query Executed Successfully!
           </h2>
 

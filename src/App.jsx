@@ -31,7 +31,7 @@ const App = () => {
       setUser(null);
       return <Navigate to="/"/>
     }
-  return (user && !isDemoUser)  ? children : <Navigate to="/" replace />;
+  return (user && isDemoUser)  ? children : <Navigate to="/" replace />;
   
 };
 
