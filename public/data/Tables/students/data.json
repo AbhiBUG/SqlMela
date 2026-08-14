@@ -1,112 +1,317 @@
-
 [
-
-    {
-    "game": "OutputGuessing",
+  {
+    "game": "Query",
     "qn": 1,
-    "question": "select * from students where age=15;",
-    "arguments": [2,5],
-    "solution": ["SELECT", "*", "FROM", "students"]
-  
+    "question": "Show all students",
+    "arguments": "SELECT * FROM students;",
+    "solution": ""
   },
   {
     "game": "Query",
     "qn": 2,
-    "question": "Find students with age 15",
-    "arguments": "select * from students where age = 15;",
+    "question": "Show student names only",
+    "arguments": "SELECT student_name FROM students;",
     "solution": ""
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 3,
-    "question": "Arrange clauses in proper SQL execution order",
-    "arguments": ["WHERE", "SELECT", "FROM", "ORDER BY"],
-    "solution": ["SELECT", "FROM", "WHERE", "ORDER BY"]
+    "question": "Find students aged 15",
+    "arguments": "SELECT * FROM students WHERE age = 15;",
+    "solution": ""
   },
   {
     "game": "Query",
     "qn": 4,
-    "question": "Count total students",
-    "arguments": "select count(*) from students;",
+    "question": "Find students older than 14",
+    "arguments": "SELECT * FROM students WHERE age > 14;",
     "solution": ""
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 5,
-    "question": "Arrange GROUP BY query correctly",
-    "arguments": ["department", "GROUP BY", "students", "SELECT"],
-    "solution": ["SELECT", "department", "FROM", "students", "GROUP BY", "department"]
+    "question": "Show all students from class 10",
+    "arguments": "SELECT * FROM students WHERE class = 10;",
+    "solution": ""
   },
   {
     "game": "Query",
     "qn": 6,
-    "question": "Find students scoring above 80",
-    "arguments": "select * from students where marks > 80;",
+    "question": "Find students whose name starts with 'A'",
+    "arguments": "SELECT * FROM students WHERE student_name LIKE 'A%';",
     "solution": ""
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 7,
-    "question": "Arrange ORDER BY query",
-    "arguments": ["marks DESC", "ORDER BY", "students", "SELECT * FROM"],
-    "solution": ["SELECT * FROM", "students", "ORDER BY", "marks DESC"]
+    "question": "Find students whose name ends with 'a'",
+    "arguments": "SELECT * FROM students WHERE student_name LIKE '%a';",
+    "solution": ""
   },
   {
     "game": "Query",
     "qn": 8,
-    "question": "Find average age",
-    "arguments": "select avg(age) from students;",
+    "question": "Count total students",
+    "arguments": "SELECT COUNT(*) FROM students;",
     "solution": ""
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 9,
-    "question": "Arrange INNER JOIN query",
-    "arguments": ["ON s.id = r.student_id", "students s", "results r", "INNER JOIN", "SELECT s.name"],
-    "solution": [
-      "SELECT s.name",
-      "FROM",
-      "students s",
-      "INNER JOIN",
-      "results r",
-      "ON s.id = r.student_id"
-    ]
+    "question": "Find the average age of students",
+    "arguments": "SELECT AVG(age) FROM students;",
+    "solution": ""
   },
   {
     "game": "Query",
     "qn": 10,
-    "question": "Find students between age 15 and 18",
-    "arguments": "select * from students where age between 15 and 18;",
+    "question": "Find the maximum age",
+    "arguments": "SELECT MAX(age) FROM students;",
     "solution": ""
   },
   {
-    "game": "Arrangement",
+    "game": "Query",
     "qn": 11,
-    "question": "Arrange HAVING clause query",
-    "arguments": ["HAVING count(*) > 5", "department", "GROUP BY", "SELECT", "students"],
-    "solution": [
-      "SELECT",
-      "department",
-      "FROM",
-      "students",
-      "GROUP BY",
-      "department",
-      "HAVING count(*) > 5"
-    ]
+    "question": "Find the minimum age",
+    "arguments": "SELECT MIN(age) FROM students;",
+    "solution": ""
   },
   {
     "game": "Query",
     "qn": 12,
-    "question": "Find students whose name starts with 'A'",
-    "arguments": "select * from students where name like 'A%';",
+    "question": "Show students sorted by age in ascending order",
+    "arguments": "SELECT * FROM students ORDER BY age ASC;",
     "solution": ""
   },
- 
   {
     "game": "Query",
     "qn": 13,
-    "question": "Find maximum marks",
-    "arguments": "select max(marks) from students;",
+    "question": "Show students sorted by name in descending order",
+    "arguments": "SELECT * FROM students ORDER BY student_name DESC;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 14,
+    "question": "Find students aged between 13 and 15",
+    "arguments": "SELECT * FROM students WHERE age BETWEEN 13 AND 15;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 15,
+    "question": "Find students taught by teacher ID 1",
+    "arguments": "SELECT * FROM students WHERE teacher_id = 1;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 16,
+    "question": "Find students whose age is either 14 or 15",
+    "arguments": "SELECT * FROM students WHERE age IN (14,15);",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 17,
+    "question": "Count students in each class",
+    "arguments": "SELECT class, COUNT(*) FROM students GROUP BY class;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 18,
+    "question": "Count students assigned to each teacher",
+    "arguments": "SELECT teacher_id, COUNT(*) FROM students GROUP BY teacher_id;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 19,
+    "question": "Find classes having more than 2 students",
+    "arguments": "SELECT class, COUNT(*) FROM students GROUP BY class HAVING COUNT(*) > 2;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 20,
+    "question": "Find the average age for each class",
+    "arguments": "SELECT class, AVG(age) FROM students GROUP BY class;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 21,
+    "question": "Find the oldest student",
+    "arguments": "SELECT * FROM students WHERE age = (SELECT MAX(age) FROM students);",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 22,
+    "question": "Find students older than the average age",
+    "arguments": "SELECT * FROM students WHERE age > (SELECT AVG(age) FROM students);",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 23,
+    "question": "Find teachers handling more than one student",
+    "arguments": "SELECT teacher_id, COUNT(*) FROM students GROUP BY teacher_id HAVING COUNT(*) > 1;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 24,
+    "question": "Show the top 3 oldest students",
+    "arguments": "SELECT * FROM students ORDER BY age DESC LIMIT 3;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 25,
+    "question": "Find students whose age equals the maximum age in their class",
+    "arguments": "SELECT * FROM students s WHERE age = (SELECT MAX(age) FROM students WHERE class = s.class);",
+    "solution": ""
+  },
+   {
+    "game": "Query",
+    "qn": 26,
+    "question": "Find students younger than 15",
+    "arguments": "SELECT * FROM students WHERE age < 15;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 27,
+    "question": "Find students not taught by teacher ID 1",
+    "arguments": "SELECT * FROM students WHERE teacher_id <> 1;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 28,
+    "question": "Display student names in alphabetical order",
+    "arguments": "SELECT student_name FROM students ORDER BY student_name ASC;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 29,
+    "question": "Count students aged 14",
+    "arguments": "SELECT COUNT(*) FROM students WHERE age = 14;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 30,
+    "question": "Find all distinct teacher IDs",
+    "arguments": "SELECT DISTINCT teacher_id FROM students;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 31,
+    "question": "Find students whose name contains the letter 'a'",
+    "arguments": "SELECT * FROM students WHERE student_name LIKE '%a%';",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 32,
+    "question": "Find the total age of all students",
+    "arguments": "SELECT SUM(age) FROM students;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 33,
+    "question": "Show the youngest two students",
+    "arguments": "SELECT * FROM students ORDER BY age ASC LIMIT 2;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 34,
+    "question": "Find the number of students handled by teacher ID 2",
+    "arguments": "SELECT COUNT(*) FROM students WHERE teacher_id = 2;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 35,
+    "question": "Find students whose names have exactly 11 characters",
+    "arguments": "SELECT * FROM students WHERE LENGTH(student_name) = 11;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 36,
+    "question": "Find the average age of students taught by teacher ID 1",
+    "arguments": "SELECT AVG(age) FROM students WHERE teacher_id = 1;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 37,
+    "question": "Find teachers whose average student age is greater than 14",
+    "arguments": "SELECT teacher_id, AVG(age) FROM students GROUP BY teacher_id HAVING AVG(age) > 14;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 38,
+    "question": "Show classes in descending order of student count",
+    "arguments": "SELECT class, COUNT(*) AS total_students FROM students GROUP BY class ORDER BY total_students DESC;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 39,
+    "question": "Find students whose names start with 'S' or 'R'",
+    "arguments": "SELECT * FROM students WHERE student_name LIKE 'S%' OR student_name LIKE 'R%';",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 40,
+    "question": "Find the second oldest student",
+    "arguments": "SELECT * FROM students ORDER BY age DESC OFFSET 1 LIMIT 1;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 41,
+    "question": "Find students whose age is above the class average",
+    "arguments": "SELECT * FROM students s WHERE age > (SELECT AVG(age) FROM students WHERE class = s.class);",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 42,
+    "question": "Find the teacher handling the maximum number of students",
+    "arguments": "SELECT teacher_id, COUNT(*) AS total_students FROM students GROUP BY teacher_id ORDER BY total_students DESC LIMIT 1;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 43,
+    "question": "Find all students whose name is not Arjun Mehta",
+    "arguments": "SELECT * FROM students WHERE student_name <> 'Arjun Mehta';",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 44,
+    "question": "Find the difference between the oldest and youngest student's age",
+    "arguments": "SELECT MAX(age) - MIN(age) AS age_difference FROM students;",
+    "solution": ""
+  },
+  {
+    "game": "Query",
+    "qn": 45,
+    "question": "Find teachers who teach exactly one student",
+    "arguments": "SELECT teacher_id, COUNT(*) FROM students GROUP BY teacher_id HAVING COUNT(*) = 1;",
     "solution": ""
   }
 ]

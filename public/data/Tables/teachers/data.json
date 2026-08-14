@@ -1,10 +1,12 @@
 [
-  {
-    "game": "Query",
+  
+    {
+    "game": "OutputGuessing",
     "qn": 1,
-    "question": "Find all teachers who teach 'Physics'",
-    "arguments": "SELECT * FROM teachers WHERE subject = 'Physics';",
-    "solution": ""
+    "question": "select * from students where age=15;",
+    "arguments": [2,5],
+    "solution": ["SELECT", "*", "FROM", "students"]
+  
   },
   {
     "game": "Arrangement",
