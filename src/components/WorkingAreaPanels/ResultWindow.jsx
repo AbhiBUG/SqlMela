@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 export default function QueryResult({ tableName, validatorResult }) {
   const [result, setResult] = useState([]);
   const [queryExecuting,setQueryExecuting] = useState(false);
+
   const fetchData = async (query) => {
     try {
       setQueryExecuting(true);
@@ -30,10 +31,10 @@ export default function QueryResult({ tableName, validatorResult }) {
   useEffect(() => {
     const isValid = validatorResult?.results?.[0]?.result?.valid;
     const query = validatorResult?.results?.[0]?.statement;
-
+      const solutionQuery = validatorResult?.solution;
     if (isValid && query) {
       fetchData(query);
-      setResult(null); // Clear previous results before fetching new data
+       // Clear previous results before fetching new data
     }
   }, [validatorResult, tableName]);
 
@@ -72,7 +73,6 @@ export default function QueryResult({ tableName, validatorResult }) {
           <h2 className="text-white font-bold">
             Query Executed Successfully!
           </h2>
-
           <div className="p-3 overflow-x-auto">
             <table className="table-auto w-full border-collapse border border-gray-300 text-[10px]">
               <thead>

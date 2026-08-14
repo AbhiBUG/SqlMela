@@ -17,7 +17,15 @@ const Query = ({ question,argument,solution,setScore,playButton,setValidatorResu
       });
 
       const data = await response.json();
-      setValidatorResult(data);
+
+          const validatorData = {
+      ...data,
+      solution: argument
+      
+    };
+    setValidatorResult(validatorData);
+
+      // setValidatorResult(data);
       console.log(`Validator response : ${JSON.stringify(data)}`);
       
     } catch (error) {
