@@ -25,10 +25,19 @@ const App = () => {
 
 
   const ProtectedRoute = ({ user, children }) => {
-
-   return (user && isDemoUser)  ? children : <Navigate to="/" replace />;
-  
-};
+    // Not logged in - redirect to login
+    if (!user) {
+      return <Navigate to="/" replace />;
+    }
+    
+    // Demo user - redirect to home (allow only login and home)
+    if (isDemoUser) {
+      return <Navigate to="/home" replace />;
+    }
+    
+    // Regular user - allow access
+    return children;
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
