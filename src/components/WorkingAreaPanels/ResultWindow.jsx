@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function QueryResult({ tableName, queryResult }) {
+export default function QueryResult({ tableName, validatorResult }) {
   const [result, setResult] = useState([]);
 
   const fetchData = async (query) => {
@@ -23,17 +23,17 @@ export default function QueryResult({ tableName, queryResult }) {
   };
 
   useEffect(() => {
-    const isValid = queryResult?.results?.[0]?.result?.valid;
-    const query = queryResult?.results?.[0]?.statement;
+    const isValid = validatorResult?.results?.[0]?.result?.valid;
+    const query = validatorResult?.results?.[0]?.statement;
 
     if (isValid && query) {
       fetchData(query);
     }
-  }, [queryResult, tableName]);
+  }, [validatorResult, tableName]);
 
-  // console.log(queryResult);
+  // console.log(validatorResult);
 
-  if (!queryResult || !queryResult?.results || queryResult.results.length === 0) {
+  if (!validatorResult || !validatorResult?.results || validatorResult.results.length === 0) {
     return (
       <div className="border shadow bg-primary/50 p-4 flex flex-col h-full">
         <p className="text-gray-500 italic">No Results</p>
@@ -41,8 +41,8 @@ export default function QueryResult({ tableName, queryResult }) {
     );
   }
 
-  const isValid = queryResult?.results?.[0]?.result?.valid;
-  const errors = queryResult?.results?.[0]?.result?.errors;
+  const isValid = validatorResult?.results?.[0]?.result?.valid;
+  const errors = validatorResult?.results?.[0]?.result?.errors;
 
   if (!isValid) {
     return (
@@ -54,7 +54,7 @@ export default function QueryResult({ tableName, queryResult }) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-primary/50">
+    <div className="flex flex-col items-center justify-center bg-primary/50 h-full">
       <h2 className=" font-bold text-white">Valid Syntax!</h2>
 
       {result.length > 0 ? (

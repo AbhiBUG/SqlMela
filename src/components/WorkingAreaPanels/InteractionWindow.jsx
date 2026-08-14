@@ -8,7 +8,7 @@ import {IoIosArrowDown} from 'react-icons/io'
 import Modal from "../Modal";
 
 
-export default function GamePanel({ tableName,setQueryResult }) {
+export default function GamePanel({ tableName,setValidatorResult }) {
 
 //imp for dataset
   const [questions, getQuestion] = useState([]); //entire data set
@@ -19,7 +19,7 @@ export default function GamePanel({ tableName,setQueryResult }) {
      const [refresh, setRefresh] = useState(false); //refresh Button
   const [isModalOpen, setIsModalOpen] = useState(false); //modal
 
-  const [result,setResult] = useState(null);
+  const [result,setValidatorResult] = useState(null);
   const [score, setScore] = useState(0);  //to be passed in modal
  // Fetch JSON dynamically based on tableName
   useEffect(() => {
@@ -39,9 +39,9 @@ export default function GamePanel({ tableName,setQueryResult }) {
  
 useEffect(() => {
   if (result) {
-    setQueryResult({ ...result });
+    setValidatorResult({ ...result });
   }
-}, [result, setQueryResult]);
+}, [result, setValidatorResult]);
 
   const currentGame = questions[currentno];
 const [questionsList,openQuestionsList] = useState(false);
@@ -64,7 +64,7 @@ useEffect(() => {
 
 const handleNext = () => {
     setCurrentno((prev) => Math.min(prev + 1, questions.length - 1));
-    setQueryResult(null); 
+    setValidatorResult(null); 
     setplayButton(0); 
     setScore(0);
   
@@ -73,7 +73,7 @@ const handleNext = () => {
 const handlePrevious = () =>{
    setCurrentno((prev) => Math.max(prev - 1, 0));
                           
-  setQueryResult(null); 
+  setValidatorResult(null); 
     setplayButton(0); 
     setScore(0); 
   
@@ -166,7 +166,7 @@ if (questions.length === 0) {
             solution={question.solution}
             setScore={setScore}
             playButton={playButton}
-            setResult={setResult}
+            setValidatorResult={setValidatorResult}
           />
         )  : (
           <p>Backend error for {question.game}</p>

@@ -4,17 +4,14 @@ import { useParams } from "react-router-dom";
 import InteractionWindow from "../components/WorkingAreaPanels/InteractionWindow";
 import ResultWindow from "../components/WorkingAreaPanels/ResultWindow";
 import TableWindow from "../components/WorkingAreaPanels/TableWindow";
-import games from "../data/games.json";
+// import games from "../data/games.json";
 import { useState } from "react";
 
 export default function TablePage() {
-  const { dbName, tableName } = useParams();
-  const tableGames = games.filter((g) => g.table === tableName);
-  // const [buttonFlag,setButtonFlag] = useState(0);
-  // console.log("Button Flag in Table Page: "+buttonFlag);
-   const [queryResult, setQueryResult] = useState(
+  const { tableName } = useParams();
+  // const tableGames = games.filter((g) => g.table === tableName);
+   const [validatorResult, setValidatorResult] = useState(
    null);
-// console.log("ParentPage queryResult:", queryResult);
 
   return (
     <div className="h-screen w-full">
@@ -42,10 +39,10 @@ export default function TablePage() {
               <h2 className="sticky text-white  bg-base top-0 p-1 font-semibold text-lg border-b text-[10px] px-2">
                 Results
               </h2>
-              <div className="overflow-y-auto flex-1  bg-white p-2 px-2 border-b-[10px]">
+              <div className="overflow-y-auto flex-1 p-2 px-2 border-b-[10px]">
                 
                 <ResultWindow tableName={tableName} 
-                queryResult={queryResult}
+                validatorResult={validatorResult}
           />
               </div>
             </div>
@@ -68,7 +65,7 @@ export default function TablePage() {
               <div className="overflow-y-auto ">
                 <InteractionWindow tableName={tableName} 
        
-                setQueryResult={setQueryResult}/>
+                setValidatorResult={setValidatorResult}/>
               </div>
             </div>
           </div>

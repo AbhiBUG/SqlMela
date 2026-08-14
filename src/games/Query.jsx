@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-const Query = ({ question,argument,solution,setScore,playButton,setResult }) => {
+const Query = ({ question,argument,solution,setScore,playButton,setValidatorResult }) => {
   const [sql, setSql] = useState("");
   const validateSQL = async () => {
     try {
@@ -17,7 +17,7 @@ const Query = ({ question,argument,solution,setScore,playButton,setResult }) => 
       });
 
       const data = await response.json();
-      setResult(data);
+      setValidatorResult(data);
       console.log(data);
        console.log("Game input : "+JSON.stringify(data));
     } catch (error) {
