@@ -15,6 +15,6 @@ router.post("/login", AuthController.login);
 router.post("/logout", AuthController.logout);
 
 // GET /auth/session - Get current session
-// router.get("/session", AuthController.getSession);
+router.get("/session", AuthController.getSession);
 
 export default router;

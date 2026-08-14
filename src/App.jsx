@@ -26,7 +26,7 @@ const App = () => {
 
   const ProtectedRoute = ({ user, children }) => {
     // Not logged in - redirect to login
-    if (!user) {
+    if (!user && !isDemoUser) {
       return <Navigate to="/" replace />;
     }
     

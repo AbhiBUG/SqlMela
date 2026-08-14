@@ -9,7 +9,7 @@ import { analyzeQuery, validateQuery } from "../services/sqlAnalyzerService.js";
 export const getTableData = async (req, res) => {
   const { tableName } = req.params;
 
-  console.log(`📊 Fetching table data for: "${tableName}"`);
+  console.log(` Fetching table data for: "${tableName}"`);
 
   // Validate table name
   if (!validateTableName(tableName)) {
