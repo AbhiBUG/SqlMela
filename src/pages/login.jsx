@@ -4,7 +4,7 @@ import DB from "../assets/DB.png";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 
-const Login = ({ setUser }) => {
+const Login = ({ setUser,setDemoUser }) => {
   const [state, setState] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -100,6 +100,14 @@ const Login = ({ setUser }) => {
             </form>
 
             <img src={DB} className="h-[120px]" alt="DB Logo" />
+            <div className="flex flex-row items-center gap-2"><p className="text-white">Don't have an account ? </p><button onClick={()=>{
+              console.log("Demo user set");
+              setUser("Demo User");
+              setDemoUser(true);
+              navigate("/home");
+            }} 
+              className="border-2 p-2 text-white font-bold rounded-2xl">Get Demo</button>
+                  </div>
           </div>
         </div>
       </div>

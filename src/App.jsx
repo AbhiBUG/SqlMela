@@ -17,12 +17,23 @@ import TablePage from "./pages/WorkingArea.jsx";
 import Profile from "./pages/Profile.jsx";
 import Maintenance from "./pages/Maintenance.jsx";
 
-const ProtectedRoute = ({ user, children }) => {
-  return user ? children : <Navigate to="/" replace />;
-};
+
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [isDemoUser,setDemoUser] = useState(false);
+
+
+  const ProtectedRoute = ({ user, children }) => {
+
+    if(isDemoUser)
+    {
+      setUser(null);
+      return <Navigate to="/"/>
+    }
+  return (user && !isDemoUser)  ? children : <Navigate to="/" replace />;
+  
+};
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -50,15 +61,12 @@ const App = () => {
         <main className="flex-1 pt-10 relative z-10">
           <Routes>
             <Route path="/maintenance" element={<Maintenance></Maintenance>}/>
-            <Route path="/" element={<Login setUser={setUser} />} />
+            <Route path="/" element={<Login setUser={setUser} setDemoUser={setDemoUser} />} />
 
             <Route
               path="/home"
-              element={
-                <ProtectedRoute user={user}>
-                  <Home />
-                 </ProtectedRoute>
-              }
+              element={ 
+              <Home />}
             />
 
             <Route

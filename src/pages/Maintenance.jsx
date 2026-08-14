@@ -1,11 +1,11 @@
 import React from "react";
-
+import M from "../assets/maintenance.png";
 const Maintenance = () => {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-6">
       <div className="max-w-lg text-center">
         <img
-          src="maintenance.png"
+          src={M}
           alt="Maintenance"
           className="w-72 mx-auto mb-10"
         />

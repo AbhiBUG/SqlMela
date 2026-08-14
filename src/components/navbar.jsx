@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const NavBar = ({ user, handleLogout }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const displayName = typeof user === "string" ? user : user?.username || "Guest";
+  const displayName = typeof user === "string" ? user : user?.username || "";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -34,9 +34,9 @@ const Logout = ()=>{
     >
       {/* Left: Brand / Logo */}
       <div className="flex items-center space-x-2">
-        <div className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold shadow-sm">
+        {/* <div className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold shadow-sm">
           DB
-        </div>
+        </div> */}
         <span className="font-bold text-lg text-gray-800">SQL Mela</span>
       </div>
 
