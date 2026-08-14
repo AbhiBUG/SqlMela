@@ -17,7 +17,9 @@ export default function TableWindow({ tableName }) {
       })
       .then((data) => setRows(data))
       .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .finally(() => {setLoading(false);
+        console.log("Fetch request initiated");
+      });
   }, [tableName]);
 
   return (
