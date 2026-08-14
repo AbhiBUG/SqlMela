@@ -131,10 +131,28 @@ STATIC_URL = 'static/'
 # ]
 #replaced with 
 
-
 CORS_ALLOWED_ORIGINS = [
     "https://sqlmelafrontend.onrender.com",
 ]
+
+
+#Newly Addeld
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sqlmelafrontend.onrender.com",
+]
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
+
+#End of newly added
+
+
 
 # Optional (only for development)
 #CORS_ALLOW_ALL_ORIGINS = True
