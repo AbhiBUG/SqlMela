@@ -35,7 +35,8 @@ const Login = ({ setUser }) => {
       if (res.ok){
         if(data.maintenance)
         {
-          navigate("/error");
+          console.log(`reading maintenance : ${data.maintenance}`)
+          navigate("/maintenance");
         }
         else{
         setUser(data.user);
