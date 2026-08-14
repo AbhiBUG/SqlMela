@@ -18,8 +18,8 @@ const Query = ({ question,argument,solution,setScore,playButton,setValidatorResu
 
       const data = await response.json();
       setValidatorResult(data);
-      console.log(data);
-       console.log("Game input : "+JSON.stringify(data));
+      console.log(`Validator response : ${JSON.stringify(data)}`);
+      
     } catch (error) {
       console.error("Error:", error);
     }

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 
 export default function QueryResult({ tableName, validatorResult }) {
   const [result, setResult] = useState([]);
-
+  const [queryExecuting,setQueryExecuting] = useState(false);
   const fetchData = async (query) => {
     try {
+      setQueryExecuting(true);
+      setResult(null); // Clear previous results before fetching new data
       const res = await fetch(`https://sqlmela.onrender.com/api/query/${tableName}`, {
         method: "POST",
         credentials : "include",
@@ -17,10 +19,13 @@ export default function QueryResult({ tableName, validatorResult }) {
       const data = await res.json();
       console.log("Fetched Data:", data);
       setResult(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    }  catch (err) {
+    console.error(err);
+    setResult([]);
+  } finally {
+    setQueryExecuting(false);
+  }
+};
 
   useEffect(() => {
     const isValid = validatorResult?.results?.[0]?.result?.valid;
@@ -54,10 +59,14 @@ export default function QueryResult({ tableName, validatorResult }) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-primary/50 h-full">
+    (queryExecuting && <div className="flex flex-col items-center justify-center bg-primary/50 h-full">
       <h2 className=" font-bold text-white">Valid Syntax!</h2>
 
-      {result.length > 0 ? (
+      {queryExecuting ? (
+  <h2 className="text-white font-bold">
+    Executing Query...
+  </h2>
+) : result === null ? null : result.length > 0 ? (
         <>
           <h2 className="text-white font-bold">
             Query Executed Successfully!
@@ -103,6 +112,6 @@ export default function QueryResult({ tableName, validatorResult }) {
       ) : (
         <h2 className="text-yellow-400 font-bold">No rows returned.</h2>
       )}
-    </div>
+    </div>)
   );
 }

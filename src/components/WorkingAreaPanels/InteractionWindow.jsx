@@ -92,14 +92,14 @@ const handleplay = () => {
 
   if (!currentGame) return;
 
-  if (currentGame.game === "Query") {
-    const isCorrect = validateQueryResult();
-    setScore(isCorrect ? 1 : 0);
-    setIsModalOpen(true);
-  }
+  // if (currentGame.game === "Query") {
+  //   const isCorrect = validateQueryResult();
+  //   setScore(isCorrect ? 1 : 0);
+  //   setIsModalOpen(true);
+  // }
 
   console.log("Button Clicked");
-  console.log("Result : " + JSON.stringify(queryresult));
+  console.log("Result before button clicked : " + JSON.stringify(queryresult));
 };
 
 
