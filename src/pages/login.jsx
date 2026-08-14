@@ -23,7 +23,7 @@ const Login = ({ setUser,setDemoUser }) => {
 
     try {
       // console.log(username,password);
-      const res = await fetch("https://sqlmela.onrender.com/login", {
+      const res = await fetch("https://sqlmela.onrender.com/auth/login", {
         method: "POST",
          credentials: "include",
         headers: { "Content-Type": "application/json" },

@@ -1,307 +1,142 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import cors from "cors";
-import fs from "fs";
-import path from "path";
-import pkg from "pg";
-import session from 'express-session';
-import passport from "./config/passport.js";
+// import passport from "./config/passport.js";
+import sessionConfig from "./config/session.js";
+import { maintenanceMiddleware, logMaintenanceStatus } from "./middlewares/maintenanceMiddleware.js";
+import { initializeUsers } from "./models/users.js";
 
-const { Pool } = pkg;
-import {checkLoggedIn,checkDeveloper} from './middlewares.js'
+// Import routes
+import authRoutes from "./routes/authRoutes.js";
+import githubRoutes from "./routes/githubRoutes.js";
+import queryRoutes from "./routes/queryRoutes.js";
+import leaderboardRoutes from "./routes/leaderboardRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-const Maintainance = true
-// Middleware
+// ===========================
+// Middleware Setup
+// ===========================
+
+// CORS Configuration
 app.use(cors({
-    origin: "https://sqlmelafrontend.onrender.com",
-    credentials: true
+  origin: process.env.FRONTEND_URL || "https://sqlmelafrontend.onrender.com",
+  credentials: true
 }));
+
+// Body Parsing Middleware
 app.use(express.json());
-app.set("trust proxy", 1);  //for render
-app.use(express.urlencoded({extended:false}))
-// Path to users file
-const usersFile = path.resolve("DB/user.json");
+app.use(express.urlencoded({ extended: false }));
 
-app.use(session({
-  secret : 'my_session_secret',
-  resave:true,
-  saveUninitialized:false,
-  name:'manfra.io',
+// Trust proxy (for deployment on render.com)
+app.set("trust proxy", 1);
 
-    cookie: {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 1000 * 60 * 60
-    }
-}))
+// Session Middleware
+app.use(sessionConfig);
 
-app.use(passport.initialize());
+// Passport Authentication Middleware
 
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-const ensureUserStats = (user) => ({
-  score: 0,
-  gamesPlayed: 0,
-  problemsSolved: 0,
-  accuracy: 0,
-  streak: 0,
-  xp: 0,
-  ...user,
+// Maintenance Mode Middleware
+app.use(maintenanceMiddleware);
+
+// ===========================
+// Initialize Data
+// ===========================
+
+console.log("Initializing SqlMela Backend Server...\n");
+
+// Initialize users from file
+const users = initializeUsers();
+console.log(`Loaded ${users.length} users from database\n`);
+
+// Log maintenance status
+logMaintenanceStatus();
+console.log("");
+
+// ===========================
+// Route Mounting
+// ===========================
+
+// Auth Routes (login, logout, session)
+app.use("/auth", authRoutes);
+
+// GitHub Routes (OAuth, repos, etc.)
+app.use("/auth", githubRoutes);
+
+// Query Routes (table data, query execution)
+app.use("/api", queryRoutes);
+
+// Leaderboard Routes
+app.use("/leaderboard", leaderboardRoutes);
+
+// User Routes (profile, stats, etc.)
+app.use("/user", userRoutes);
+
+// ===========================
+// Health Check Endpoint
+// ===========================
+
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "Server is running",
+    timestamp: new Date().toISOString()
+  });
 });
 
-const saveUsers = () => {
-  try {
-    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2), "utf-8");
-  } catch (err) {
-    console.error("❌ Failed to save users:", err.message);
-  }
-};
+// ===========================
+// Error Handling Middleware
+// ===========================
 
-// Load users
-let users = [];
-try {
-  if (fs.existsSync(usersFile)) {
-    const data = fs.readFileSync(usersFile, "utf-8");
-    users = JSON.parse(data || "[]");
-    users = users.map(ensureUserStats);
-    console.log(`Loaded ${users.length} users from DB/user.json`);
-  }
-} catch (err) {
-  console.error("Failed to load users:", err.message);
-}
-
-
-// Login route
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  console.log(" Incoming login request:", { username, password });
-
-  if (!username || !password) {
-    console.warn("Missing credentials in request");
-    return res.status(400).json({ success: false, message: "Missing credentials" });
-  }
-
-  const user = users.find(
-    (u) => u.username === username && u.password === password
-  );
-  
-  if (user) {
-    console.log(`Login successful for user: ${username}`);
-
-    req.session.user = {id:user.id,username:user.username,fullname:user.name,role:user.role};
-        req.session.save((err) => {
-        if (err) {
-            console.error("Session save error:", err);
-        }
-        console.log("Session saved successfully");
-    
-        if(Maintainance && user.role!="developer"){
-      return res.json(
-        {
-          success:true,
-          maintenance : true,
-          message : "Site Under Maintence"
-        }
-    )
-  }
-        return res.json({ success: true, message: "Login successful", user });
-      });
-    
-    
-  } else {
-    console.warn(`Invalid login attempt for username: ${username}`);
-    res.status(401).json({ success: false, message: "Invalid credentials" });
-  }
+app.use((err, req, res, next) => {
+  console.error(" Error:", err);
+  res.status(500).json({
+    success: false,
+    error: "Internal Server Error",
+    message: process.env.NODE_ENV === "development" ? err.message : "An error occurred"
+  });
 });
 
-// PostgreSQL connection
-// const pool = new Pool({
-//   user: "postgres",       // change this
-//   host: "localhost",      // or your DB host
-//   database: "sqlMela",    // your DB name
-//   password: "1234",       // change this
-//   port: 5432,             // default postgres port
-// });
-
-
-//Hosted
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: "Not Found",
+    message: `Route ${req.originalUrl} not found`
+  });
 });
 
-// Test DB connection once
-pool.connect()
-  .then(() => console.log("Connected to PostgreSQL database"))
-  .catch((err) => console.error("Failed to connect to DB:", err.message));
+// ===========================
+// Server Startup
+// ===========================
 
-// Route to fetch table data
-app.get("/api/table/:tableName", async (req, res) => {
-  const { tableName } = req.params;
-
-  console.log(`Incoming request for table: "${tableName}"`);
-
-  try {
-    // Validate table name to avoid SQL injection
-    if (!/^[a-zA-Z0-9_]+$/.test(tableName)) {
-      console.warn(`Invalid table name received: "${tableName}"`);
-      return res.status(400).json({ error: "Invalid table name" });
-    }
-
-    console.log(`Executing query: SELECT * FROM ${tableName} LIMIT 100`);
-    const result = await pool.query(`SELECT * FROM ${tableName} LIMIT 100`);
-
-    console.log(`Query successful. Rows returned: ${result.rowCount}`);
-    res.json(result.rows);
-  } catch (err) {
-    console.error(` DB Error while fetching "${tableName}":`, err.message);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
-
-// app.get("/session", (req, res) => {
-//     console.log("Session:", req.session);
-
-//     res.json({
-//         sessionID: req.sessionID,
-//         user: req.session.user || null
-//     });
-// });
-
-app.post("/api/query/:tableName",checkLoggedIn, async (req, res) => {
-  console.log("Proceeding with data retrieval");
-  const { tableName } = req.params;
-  const { query } = req.body;
-
-  try {
-    const result = await pool.query(query);
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-
-app.post("/validate-output", async (req, res) => {
-    const { query } = req.body;
-
-    try {
-        const result = await pool.query(query);
-
-        res.json(result.rows);
-    } catch (err) {
-        res.status(400).json({
-            error: err.message,
-        });
-    }
-});
-
-// Update user stats after a completed run
-const updateUserStats = ({ username, scoreIncrement = 0, solvedIncrement = 0 }) => {
-  const user = users.find((u) => u.username === username);
-  if (!user) return null;
-
-  user.score += scoreIncrement;
-  user.gamesPlayed += scoreIncrement > 0 || solvedIncrement > 0 ? 1 : 0;
-  user.problemsSolved += solvedIncrement;
-  user.accuracy = user.gamesPlayed > 0 ? Math.round((user.problemsSolved / user.gamesPlayed) * 100) : 0;
-  user.streak = user.streak + 1;
-  user.xp += scoreIncrement;
-
-  saveUsers();
-  return user;
-};
-
-app.post("/user/update-stats", (req, res) => {
-  const { username, scoreIncrement, solvedIncrement } = req.body;
-
-  if (!username) {
-    return res.status(400).json({ error: "Missing username" });
-  }
-
-  const user = updateUserStats({ username, scoreIncrement, solvedIncrement });
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  return res.json({ success: true, user });
-});
-
-app.get("/leaderboard", (req, res) => {
-  const leaderboard = [...users]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 10)
-    .map((user) => ({
-      username: user.username,
-      score: user.score,
-      gamesPlayed: user.gamesPlayed,
-      problemsSolved: user.problemsSolved,
-      accuracy: user.accuracy,
-      streak: user.streak,
-      xp: user.xp,
-    }));
-
-  res.json(leaderboard);
-});
-
-
-
-// app.get(
-//   "/auth/github",
-//   passport.authenticate("github", {
-//     scope: [
-//       "repo",
-//       "read:user"
-//     ]
-//   })
-// );
-
-
-
-// app.get(
-//   "/auth/github/callback",
-//   passport.authenticate("github", {
-//     session: false
-//   }),
-//   async (req, res) => {
-
-//     const { profile, accessToken } =
-//       req.user;
-
-//     await pool.query(
-//       `
-//       INSERT INTO github_accounts
-//       (
-//         user_id,
-//         github_username,
-//         access_token
-//       )
-//       VALUES ($1,$2,$3)
-
-//       ON CONFLICT (user_id)
-//       DO UPDATE
-//       SET access_token = $3
-//       `,
-//       [
-//         req.session.user.id,
-//         profile.username,
-//         accessToken
-//       ]
-//     );
-
-//     res.redirect(
-//       "https://sqlmelafrontend.onrender.com/practice"
-//     );
-//   }
-// );
-
-
-// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log("━".repeat(50));
+  console.log(` Server running on http://localhost:${PORT}`);
+  console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log("━".repeat(50));
+  console.log("\nAvailable Routes:");
+  console.log("  • POST   /auth/login");
+  console.log("  • POST   /auth/logout");
+  console.log("  • GET    /auth/session");
+  console.log("  • GET    /auth/github");
+  console.log("  • GET    /auth/github/callback");
+  console.log("  • GET    /auth/github/account");
+  console.log("  • GET    /auth/github/repos");
+  console.log("  • POST   /auth/github/repo/content");
+  console.log("  • GET    /api/table/:tableName");
+  console.log("  • POST   /api/query/:tableName");
+  console.log("  • POST   /api/validate-output");
+  console.log("  • GET    /leaderboard");
+  console.log("  • POST   /user/update-stats");
+  console.log("  • GET    /user/profile");
+  console.log("  • GET    /user/all");
+  console.log("  • GET    /health");
+  console.log("");
 });
+
+export default app;
