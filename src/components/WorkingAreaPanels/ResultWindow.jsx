@@ -1,39 +1,42 @@
 import React, { useState, useEffect } from "react";
 
-export default function QueryResult({ tableName, validatorResult }) {
+export default function QueryResult({
+tablename,  validatorResult,
+}) {
   const [result, setResult] = useState([]);
-  const [queryExecuting, setQueryExecuting] = useState(false);
-  const [comparisonResult, setComparisonResult] = useState(null);
+  const [queryExecuting, setQueryExecuting] =
+    useState(false);
 
-  const normalizeRows = (rows = []) =>
-    rows.map((row) => Object.values(row));
+  const [comparisonResult, setComparisonResult] =
+    useState(null);
 
-  const areRowsEquivalent = (a = [], b = []) => {
-    if (a.length !== b.length) return false;
-
-    return (
-      JSON.stringify(normalizeRows(a)) ===
-      JSON.stringify(normalizeRows(b))
-    );
-  };
-
-  const fetchQueryResult = async (query) => {
+  const executeQuery = async (
+    userQuery,
+    solutionQuery
+  ) => {
     const res = await fetch(
-      `https://sqlmela.onrender.com/api/query/${tableName}`,
+      `https://sqlmela.onrender.com/api/validate-output`,
       {
         method: "POST",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type":
+            "application/json",
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({
+          userQuery,
+          solutionQuery,
+        }),
       }
     );
 
     const data = await res.json();
 
     if (!res.ok) {
-      throw new Error(data.error || "Query execution failed");
+      throw new Error(
+        data.error ||
+          "Query execution failed"
+      );
     }
 
     return data;
@@ -45,27 +48,26 @@ export default function QueryResult({ tableName, validatorResult }) {
       setComparisonResult(null);
 
       const userQuery =
-        validatorResult?.results?.[0]?.statement;
+        validatorResult?.results?.[0]
+          ?.statement;
 
       const solutionQuery =
         validatorResult?.solution;
 
-      if (!userQuery || !solutionQuery) return;
+      if (!userQuery || !solutionQuery)
+        return;
 
-      const userRows = await fetchQueryResult(userQuery);
+      const data =
+        await executeQuery(
+          userQuery,
+          solutionQuery
+        );
 
-      const solutionRows = await fetchQueryResult(solutionQuery);
-
-      setResult(userRows);
-
-      const matched = areRowsEquivalent(
-        userRows,
-        solutionRows
-      );
+      setResult(data.rows || []);
 
       setComparisonResult({
-        matched,
-        message: matched
+        matched: data.correct,
+        message: data.correct
           ? "Correct Answer"
           : "Incorrect Output",
       });
@@ -85,12 +87,13 @@ export default function QueryResult({ tableName, validatorResult }) {
 
   useEffect(() => {
     const isValid =
-      validatorResult?.results?.[0]?.result?.valid;
+      validatorResult?.results?.[0]
+        ?.result?.valid;
 
     if (isValid) {
       validateOutput();
     }
-  }, [validatorResult, tableName]);
+  }, [validatorResult]);
 
   if (
     !validatorResult ||
@@ -105,10 +108,12 @@ export default function QueryResult({ tableName, validatorResult }) {
   }
 
   const isValid =
-    validatorResult?.results?.[0]?.result?.valid;
+    validatorResult?.results?.[0]
+      ?.result?.valid;
 
   const errors =
-    validatorResult?.results?.[0]?.result?.errors;
+    validatorResult?.results?.[0]
+      ?.result?.errors;
 
   if (!isValid) {
     return (
@@ -128,7 +133,6 @@ export default function QueryResult({ tableName, validatorResult }) {
 
   return (
     <div className="flex flex-col items-center bg-primary/50 h-full">
-
       <h2 className="text-green-400 font-bold">
         Valid Syntax
       </h2>
@@ -154,10 +158,11 @@ export default function QueryResult({ tableName, validatorResult }) {
           {result?.length > 0 ? (
             <div className="p-3 overflow-x-auto w-full">
               <table className="table-auto w-full border-collapse border border-gray-300 text-[10px]">
-
                 <thead>
                   <tr>
-                    {Object.keys(result[0]).map((col) => (
+                    {Object.keys(
+                      result[0]
+                    ).map((col) => (
                       <th
                         key={col}
                         className="border px-4 py-2 bg-gray-700 text-white"
@@ -169,20 +174,27 @@ export default function QueryResult({ tableName, validatorResult }) {
                 </thead>
 
                 <tbody>
-                  {result.map((row, i) => (
-                    <tr key={i}>
-                      {Object.values(row).map((val, j) => (
-                        <td
-                          key={j}
-                          className="border px-4 py-2 text-white"
-                        >
-                          {String(val)}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
+                  {result.map(
+                    (row, i) => (
+                      <tr key={i}>
+                        {Object.values(
+                          row
+                        ).map(
+                          (val, j) => (
+                            <td
+                              key={j}
+                              className="border px-4 py-2 text-white"
+                            >
+                              {String(
+                                val
+                              )}
+                            </td>
+                          )
+                        )}
+                      </tr>
+                    )
+                  )}
                 </tbody>
-
               </table>
             </div>
           ) : (

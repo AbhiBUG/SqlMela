@@ -14,7 +14,7 @@ router.get("/table/:tableName", QueryController.getTableData);
 // POST /api/query/:tableName - Execute custom query (requires login)
 router.post("/query/:tableName", checkLoggedIn, QueryController.executeQuery);
 
-// POST /api/validate-output - Validate query output (requires login)
-router.post("/validate-output", checkLoggedIn, QueryController.validateOutput);
+// POST /api/validate-output - Compare user query with solution (requires login)
+router.post("/validate-output", checkLoggedIn, QueryController.compareQuery);
 
 export default router;
