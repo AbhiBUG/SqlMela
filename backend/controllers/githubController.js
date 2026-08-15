@@ -177,18 +177,25 @@ export const handleGitHubCallback = async (req, res) => {
     }
 
     // Store GitHub data in session
-    req.session.github = {
-      id: profile.id,
-      username: profile.username,
-      accessToken,
-      linkedAt: new Date().toISOString()
-    };
+req.session.github = {
+  id: profile.id,
+  username: profile.username,
+  accessToken,
+  linkedAt: new Date().toISOString()
+};
 
-    console.log(
-      `✅ GitHub account linked for user: ${profile.username}`
-    );
+req.session.save((err) => {
+  if (err) {
+    console.error("Session save error:", err);
 
-    res.redirect("https://sqlmelafrontend.onrender.com/practice");
+    return res.status(500).json({
+      success: false,
+      message: "Failed to save GitHub session"
+    });
+  }
+
+  res.redirect("https://sqlmelafrontend.onrender.com/home");
+});
   } catch (err) {
     console.error("❌ Error in GitHub callback:", err.message);
 
