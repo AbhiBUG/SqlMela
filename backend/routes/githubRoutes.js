@@ -1,5 +1,5 @@
 import express from "express";
-import passport from "passport";
+import passport from "../config/passport.js";
 import * as GitHubController from "../controllers/githubController.js";
 import { checkLoggedIn } from "../middlewares/authMiddleware.js";
 import { checkGitHubToken } from "../middlewares/githubMiddleware.js";

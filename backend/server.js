@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-// import passport from "./config/passport.js";
+import passport from "./config/passport.js";
 import sessionConfig from "./config/session.js";
 import { maintenanceMiddleware, logMaintenanceStatus } from "./middlewares/maintenanceMiddleware.js";
 import { initializeUsers } from "./models/users.js";
@@ -37,8 +37,8 @@ app.use(sessionConfig);
 
 // Passport Authentication Middleware
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Maintenance Mode Middleware
 app.use(maintenanceMiddleware);

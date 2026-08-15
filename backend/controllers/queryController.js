@@ -338,7 +338,7 @@ export const executeQuery = async (req, res) => {
 |--------------------------------------------------------------------------
 */
 
-export const compareQuery = async (
+export const compareQuery = async ( //called from resultWindow
   req,
   res
 ) => {
