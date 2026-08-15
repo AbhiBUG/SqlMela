@@ -13,7 +13,7 @@ export const getTableData = async (req, res) => {
 
   // Validate table name
   if (!validateTableName(tableName)) {
-    console.warn(`❌ Invalid table name received: "${tableName}"`);
+    console.warn(` Invalid table name received: "${tableName}"`);
     return res.status(400).json({
       success: false,
       error: "Invalid table name"
@@ -22,12 +22,32 @@ export const getTableData = async (req, res) => {
 
   try {
     const query = `SELECT * FROM ${tableName} LIMIT 100`;
-    console.log(`🔄 Executing query: ${query}`);
+    console.log(`Executing query: ${query}`);
 
     const result = await pool.query(query);
 
-    console.log(`✅ Query successful. Rows returned: ${result.rowCount}`);
+    console.log(` Query successful. Rows returned: ${result.rowCount}`);
+
+    if (!req.session.sandbox) {
+      req.session.sandbox = {};
+    }
+
+    // Create table sandbox only once
+    if (!req.session.sandbox[tableName]) {
+      req.session.sandbox[tableName] =
+        structuredClone(result.rows);
+
+      console.log(
+        `Created sandbox for ${tableName}`
+      );
+    }
+
+  console.log("Session sandbox data " +req.session.sandbox);
+
  res.json(result.rows);
+
+
+
   } catch (err) {
     console.error(` DB Error for table "${tableName}":`, err.message);
     res.status(500).json({
@@ -67,11 +87,11 @@ export const executeQuery = async (req, res) => {
     // Execute query
     const result = await pool.query(query);
 
-    console.log(`✅ Query executed successfully. Rows returned: ${result.rowCount}`);
+    console.log(` Query executed successfully. Rows returned: ${result.rowCount}`);
 
 res.json(result.rows);
   } catch (err) {
-    console.error(`❌ Query execution error:`, err.message);
+    console.error(` Query execution error:`, err.message);
     res.status(500).json({
       success: false,
       error: "Query execution failed",
@@ -105,7 +125,7 @@ export const validateOutput = async (req, res) => {
     // Execute and return results
     const result = await pool.query(query);
 
-    console.log(`✅ Output validation successful. Rows: ${result.rowCount}`);
+    console.log(`Output validation successful. Rows: ${result.rowCount}`);
 
     res.json({
       success: true,
@@ -113,7 +133,7 @@ export const validateOutput = async (req, res) => {
       rows: result.rows
     });
   } catch (err) {
-    console.error(`❌ Validation error:`, err.message);
+    console.error(` Validation error:`, err.message);
     res.status(400).json({
       success: false,
       error: "Query validation failed",
