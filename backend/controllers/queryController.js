@@ -212,6 +212,7 @@ export const getTableData = async (req, res) => {
       success: false,
       error: "Invalid table name",
     });
+    console.log("Error : Invalid table name");
   }
 
   try {
@@ -225,6 +226,7 @@ export const getTableData = async (req, res) => {
         success: false,
         error: "Table not found",
       });
+      console.log("Error : Table not found");
     }
 
     return res.json(table);
@@ -238,6 +240,7 @@ export const getTableData = async (req, res) => {
       success: false,
       error: "Failed to fetch table data",
     });
+    console.log("Error : Failed to fetch table.");
   }
 };
 
@@ -261,6 +264,7 @@ export const executeQuery = async (req, res) => {
       success: false,
       error: "Missing query",
     });
+    console.log("Error Missing query");
   }
 
   try {
@@ -324,6 +328,7 @@ export const executeQuery = async (req, res) => {
       success: false,
       error: err.message,
     });
+    console.log("Error Unexpected execution errror");
   }
 };
 
@@ -350,6 +355,7 @@ export const compareQuery = async (
       success: false,
       error: "Missing userQuery",
     });
+    console.log("Error : Missing userQuery");
   }
 
   if (
@@ -360,6 +366,7 @@ export const compareQuery = async (
       success: false,
       error: "Missing solutionQuery",
     });
+    console.log("Error : Missing solutionQuery");
   }
 
   try {
@@ -509,6 +516,7 @@ export const compareQuery = async (
       success: false,
       error: err.message,
     });
+    console.log("Error : Comparison error");
   }
 };
 
