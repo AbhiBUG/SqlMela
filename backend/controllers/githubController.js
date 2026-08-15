@@ -188,7 +188,7 @@ export const handleGitHubCallback = async (req, res) => {
       `✅ GitHub account linked for user: ${profile.username}`
     );
 
-    res.redirect("https://sqlmelafrontend.onrender.com/home");
+    res.redirect("https://sqlmelafrontend.onrender.com/practice");
   } catch (err) {
     console.error("❌ Error in GitHub callback:", err.message);
 
