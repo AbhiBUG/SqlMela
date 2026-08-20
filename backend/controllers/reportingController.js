@@ -64,7 +64,7 @@ export const bugReport = async (req, res) => {
 
     const result = await pool.query(
       `
-      INSERT INTO bug_reports (
+      INSERT INTO bugreports (
         ticket_id,
         user_id,
         issue_type,
