@@ -17,4 +17,5 @@ router.post("/query/:tableName", checkLoggedIn, QueryController.executeQuery);
 // POST /api/validate-output - Compare user query with solution (requires login)
 router.post("/validate-output", checkLoggedIn, QueryController.compareQuery);
 
+
 export default router;

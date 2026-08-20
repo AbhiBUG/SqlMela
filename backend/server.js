@@ -11,6 +11,7 @@ import githubRoutes from "./routes/githubRoutes.js";
 import queryRoutes from "./routes/queryRoutes.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -70,6 +71,7 @@ app.use("/auth", githubRoutes);
 // Query Routes (table data, query execution)
 app.use("/api", queryRoutes);
 
+app.use("/report",reportRoutes)
 // Leaderboard Routes
 app.use("/leaderboard", leaderboardRoutes);
 

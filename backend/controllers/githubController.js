@@ -167,6 +167,7 @@ import * as GitHubService from "../services/githubService.js";
 
 export const handleGitHubCallback = async (req, res) => {
   try {
+    console.log("Insidle GitHub callback handler");
     const { profile, accessToken } = req.user;
 
     if (!req.session.user) {

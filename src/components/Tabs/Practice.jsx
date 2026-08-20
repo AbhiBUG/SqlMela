@@ -14,6 +14,7 @@ import {
 
 import CodeViewerModal from "../CodeViewerModal";
 
+
 const Practice = () => {
   const [selectedQueryType, setSelectedQueryType] = useState(null);
   const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
@@ -138,7 +139,7 @@ const Practice = () => {
 
 
       {/* Query Selection */}
-      <div className="max-w-7xl mx-auto px-6 pb-8">
+      <div className="max-w-7xl mx-auto px-6 pb-8 flex flex-col gap-3">
         <div className="bg-white rounded-xl shadow border p-6">
 
           <h2 className="text-lg font-semibold text-gray-800 mb-5">
@@ -172,7 +173,7 @@ const Practice = () => {
             ))}
           </div>
         </div>
-        <button className="border-2 border-black text-[20px] px-2" >Practice</button>
+        <button className="text-[20px] px-5 bg-orange-600 rounded-3xl text-white p-1 h-content" >Practice</button>
       </div>
 
 

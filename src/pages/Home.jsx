@@ -3,8 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import Tables from '../components/Tabs/Database.jsx';
 import Practice from '../components/Tabs/Practice.jsx';
 import Tests from '../components/Tabs/Test.jsx';
+import C from '../assets/coffee.png'
+import BugReporting from '../components/modals/BugReporting.jsx';
 const Home = () => {
   const [value, setValue] = useState(0);
+  const [reportModalStatus,changeReportModal] = useState(false);
+  const reportError = () =>{
+    changeReportModal(!reportModalStatus);
+
+  }
   const tabs = [
     {
       name:"Databases",
@@ -42,9 +49,21 @@ const Home = () => {
             <div className="bg-white w-screen">
                 {tabs[value].component} 
             </div>
-
+              
 
           </div>
+          {
+            reportModalStatus && <BugReporting changeStatus = {changeReportModal}/>
+          }
+          <div className="flex flex-col items-center ">
+              <div className="flex flex-col items-center justify-center cursor-pointer">
+                <img src={C} className="h-[70px]"></img>
+                <p>Buy a Cofee</p>
+            </div>
+            <div className="cursor-pointer" onClick={()=>reportError()}>
+              <button className="bg-orange-600 px-5 p-2 text-white rounded-2xl">Report Error</button>
+            </div>
+            </div>
         </div>
       </div>
     </>
