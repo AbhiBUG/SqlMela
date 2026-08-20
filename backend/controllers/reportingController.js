@@ -2,6 +2,7 @@ import pool from "../config/db.js";
 import sendDiscordNotification from "../services/discordService.js";
 
 export const bugReport = async (req, res) => {
+  console.log("Bug reporting initiated");
   try {
     const {
       issueType,
