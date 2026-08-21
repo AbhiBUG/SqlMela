@@ -4,10 +4,12 @@ import Tables from '../components/Tabs/Database.jsx';
 import Practice from '../components/Tabs/Practice.jsx';
 import Tests from '../components/Tabs/Test.jsx';
 import C from '../assets/coffee.png'
-import BugReporting from '../components/modals/BugReporting.jsx';
+import BugReporting from '../components/modals/BugReportModal.jsx';
+import PaymentModal from '../components/modals/PaymentModal.jsx';
 const Home = () => {
   const [value, setValue] = useState(0);
   const [reportModalStatus,changeReportModal] = useState(false);
+  const [paymentModalStatus,changePaymentModal] = useState(false);
   const reportError = () =>{
     changeReportModal(!reportModalStatus);
 
@@ -55,8 +57,12 @@ const Home = () => {
           {
             reportModalStatus && <BugReporting changeStatus = {changeReportModal}/>
           }
-          <div className="flex flex-col items-center ">
-              <div className="flex flex-col items-center justify-center cursor-pointer">
+
+          {
+             paymentModalStatus && <PaymentModal onClose = {changePaymentModal}/>
+          }
+          <div className="fixed bottom-1 z-40 flex justify-between w-full items-center cursor-pointer px-2">
+              <div className="flex flex-col items-center justify-center cursor-pointer" onClick={()=>changePaymentModal(!reportModalStatus)}>
                 <img src={C} className="h-[70px]"></img>
                 <p>Buy a Cofee</p>
             </div>

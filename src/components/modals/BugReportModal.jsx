@@ -223,7 +223,7 @@ const BugReporting = ({ changeStatus }) => {
 
           {/* Automatically captured information */}
 
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          {/* <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
 
             <p className="text-sm font-medium text-gray-700 mb-2">
               We'll automatically include:
@@ -235,7 +235,7 @@ const BugReporting = ({ changeStatus }) => {
               <p>✓ Screen resolution</p>
             </div>
 
-          </div>
+          </div> */}
 
           {/* Buttons */}
 
