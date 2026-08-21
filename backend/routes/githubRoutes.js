@@ -41,7 +41,7 @@ router.get(
 
 // POST /github/repo/content - Get repository content
 router.post(
-  "/github/repo/content",
+  "/github/repos/repo-content",
   checkLoggedIn,
   GitHubController.getRepoContent
 );

@@ -245,6 +245,7 @@ export const getUserGitHubAccount = async (req, res) => {
 };
 
 export const getUserRepos = async (req, res) => {
+  console.log("Inside user Repos fetch");
   try {
     if (!req.session.user) {
       return res.status(401).json({
@@ -283,6 +284,7 @@ export const getUserRepos = async (req, res) => {
 };
 
 export const getRepoContent = async (req, res) => {
+  console.log("Inside get Repo Content");
   try {
     const { owner, repo, path } = req.body;
 

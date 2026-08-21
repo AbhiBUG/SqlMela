@@ -20,7 +20,7 @@ export const getGitHubUserProfile = async (accessToken) => {
     
     return await response.json();
   } catch (err) {
-    console.error("❌ Error fetching GitHub profile:", err.message);
+    console.error("Error fetching GitHub profile:", err.message);
     throw err;
   }
 };
@@ -41,7 +41,7 @@ export const getGitHubUserRepos = async (accessToken, username) => {
     
     return await response.json();
   } catch (err) {
-    console.error("❌ Error fetching GitHub repos:", err.message);
+    console.error("Error fetching GitHub repos:", err.message);
     throw err;
   }
 };
