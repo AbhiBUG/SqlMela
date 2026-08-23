@@ -2,6 +2,12 @@
  * Authentication middleware - checks if user is logged in
  */
 export const checkLoggedIn = (req, res, next) => {
+    console.log("=== AUTH DEBUG ===");
+  console.log("Origin:", req.headers.origin);
+  console.log("Cookie:", req.headers.cookie);
+  console.log("Session ID:", req.sessionID);
+  console.log("Session:", req.session);
+  console.log("User:", req.session?.user);
   if (req.session && req.session.user) {
     return next();
   }
