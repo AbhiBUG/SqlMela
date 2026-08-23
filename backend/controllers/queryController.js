@@ -1,5 +1,5 @@
 import pool from "../config/db.js";
-import { validateTableName } from "../utils/queryParser.js";
+// import { validateTableName } from "../utils/queryParser.js";
 import alasql from "alasql";
 
 /*
@@ -207,13 +207,13 @@ const compareSandboxState = (
 export const getTableData = async (req, res) => {
   const { tableName } = req.params;
 
-  if (!validateTableName(tableName)) {
-    return res.status(400).json({
-      success: false,
-      error: "Invalid table name",
-    });
-    console.log("Error : Invalid table name");
-  }
+  // if (!validateTableName(tableName)) {
+  //   return res.status(400).json({
+  //     success: false,
+  //     error: "Invalid table name",
+  //   });
+  //   console.log("Error : Invalid table name");
+  // }
 
   try {
     await initializeSandbox(req);

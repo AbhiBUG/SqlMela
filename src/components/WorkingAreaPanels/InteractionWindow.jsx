@@ -123,7 +123,12 @@ if (questions.length === 0) {
                              
                                {questions.map((question)=>(
                               
-                               <div className="border border-black bg-white w-[30px] h-[30px] flex items-center justify-center text-sm font-medium cursor-pointer hover:bg-black hover:text-white "
+                               <div className={`border border-black  w-[30px] h-[30px] flex items-center justify-center text-sm font-medium cursor-pointer                
+                                ${
+                                    currentno === question.qn - 1
+                                      ? "bg-green text-white"
+                                      : "bg-white text-black hover:bg-black hover:text-white"
+                                  }`}
                                onClick={()=>setCurrentno(question.qn-1)}>{question.qn}</div>
                                ))
                               }
