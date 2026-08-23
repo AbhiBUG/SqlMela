@@ -10,6 +10,26 @@ const Home = () => {
   const [value, setValue] = useState(0);
   const [reportModalStatus,changeReportModal] = useState(false);
   const [paymentModalStatus,changePaymentModal] = useState(false);
+
+
+
+    try {
+      console.log("Activating django server");
+      const response = fetch("https://djangobackend-bc3u.onrender.com/api/validate/", {   //localhost:8000 replaced
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sql: "select",
+          dialect: "ansi",
+        }),
+      });
+    }catch(error)
+    {
+      console.log("Error");
+    }
+
   const reportError = () =>{
     changeReportModal(!reportModalStatus);
 
