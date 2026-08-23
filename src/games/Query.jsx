@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 const Query = ({ question,argument,solution,setScore,playButton,setValidatorResult }) => {
   const [sql, setSql] = useState("");
+
   const validateSQL = async () => {
     try {
       const response = await fetch("https://djangobackend-bc3u.onrender.com/api/validate/", {   //localhost:8000 replaced
@@ -17,13 +18,12 @@ const Query = ({ question,argument,solution,setScore,playButton,setValidatorResu
       });
 
       const data = await response.json();
-
-          const validatorData = {
+ console.timeEnd("Validator Request");
+    setValidatorResult({
       ...data,
       solution: argument
       
-    };
-    setValidatorResult(validatorData);
+    });
 
       // setValidatorResult(data);
       console.log(`Validator response : ${JSON.stringify(data)}`);
@@ -35,10 +35,14 @@ const Query = ({ question,argument,solution,setScore,playButton,setValidatorResu
 
 useEffect(() => {
   if (playButton > 0) {
+    console.log("Buttoon play clicked ; Inside Query, Ready to pass to validator")
     validateSQL();
   }
 }, [playButton]);
 
+useEffect(()=>{
+
+},[setValidatorResult])
 
   return (
     <div className="question text-white flex flex-col items-center  h-screen">
