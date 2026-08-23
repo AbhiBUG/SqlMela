@@ -61,7 +61,7 @@ const Home = () => {
           {
              paymentModalStatus && <PaymentModal onClose = {changePaymentModal}/>
           }
-          <div className="fixed bottom-1 z-40 flex justify-between w-full items-center cursor-pointer px-2">
+          <div className="fixed bottom-1 z-40 flex justify-between w-full items-center px-2">
               <div className="flex flex-col items-center justify-center cursor-pointer" onClick={()=>changePaymentModal(!reportModalStatus)}>
                 <img src={C} className="h-[70px]"></img>
                 <p>Buy a Cofee</p>

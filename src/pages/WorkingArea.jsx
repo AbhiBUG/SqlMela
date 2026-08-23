@@ -5,13 +5,17 @@ import InteractionWindow from "../components/WorkingAreaPanels/InteractionWindow
 import ResultWindow from "../components/WorkingAreaPanels/ResultWindow";
 import TableWindow from "../components/WorkingAreaPanels/TableWindow";
 // import games from "../data/games.json";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 export default function TablePage() {
   const { tableName } = useParams();
   // const tableGames = games.filter((g) => g.table === tableName);
    const [validatorResult, setValidatorResult] = useState(
    null);
+
+useEffect(()=>{
+    console.log("validator result set");
+},[setValidatorResult]);
 
   return (
     <div className="h-screen w-full">

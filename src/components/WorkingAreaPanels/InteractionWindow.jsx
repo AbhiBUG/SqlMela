@@ -8,7 +8,7 @@ import {IoIosArrowDown} from 'react-icons/io'
 import Modal from "../Modal";
 
 
-export default function GamePanel({ tableName,setValidatorResult }) {
+export default function InteractionWindow({ tableName,setValidatorResult }) {
 
 //imp for dataset
   const [questions, getQuestion] = useState([]); //entire data set
@@ -41,7 +41,7 @@ useEffect(() => {
   if (queryresult) {
     setQueryResult({ ...queryresult });
   }
-}, [queryresult, setQueryResult]);
+}, [playButton,queryresult, setQueryResult]);
 
   const currentGame = questions[currentno];
 const [questionsList,openQuestionsList] = useState(false);
@@ -51,6 +51,7 @@ useEffect(() => {
   if (playButton === 1 && currentGame.game !== "Query") {
     setIsModalOpen(true);
   }
+  
 }, [playButton, currentGame, questions]);
 
 
@@ -79,27 +80,24 @@ const handlePrevious = () =>{
   
 }
 
-  const validateQueryResult = () => {
-  if (!currentGame || !queryresult) return false;
+//   const validateQueryResult = () => {
+//   if (!currentGame || !queryresult) return false;
 
-  const expected = currentGame.solution;
+//   const expected = currentGame.solution;
 
-  return JSON.stringify(queryresult) === JSON.stringify(expected);
-};
+//   return JSON.stringify(queryresult) === JSON.stringify(expected);
+// };
 
 const handleplay = () => {
   setplayButton((prev) => prev + 1);
-
   if (!currentGame) return;
-
+  console.log("Button Clicked");
+  console.log("Result before button clicked : " + JSON.stringify(queryresult));
   // if (currentGame.game === "Query") {
   //   const isCorrect = validateQueryResult();
   //   setScore(isCorrect ? 1 : 0);
   //   setIsModalOpen(true);
   // }
-
-  console.log("Button Clicked");
-  console.log("Result before button clicked : " + JSON.stringify(queryresult));
 };
 
 
