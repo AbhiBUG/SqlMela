@@ -1,21 +1,53 @@
 import pool from "../config/db.js";
-// import { validateTableName } from "../utils/queryParser.js";
 import alasql from "alasql";
+import redis from "../config/redis.js";
 
-/*
-|--------------------------------------------------------------------------
-| Configuration
-|--------------------------------------------------------------------------
-*/
+
+//Configuration
 
 const SANDBOX_TABLES = ["students", "teachers"];
+//Initialize sandbox
+const CACHE_TTL = 300; // 5 minutes
 
 /*
-|--------------------------------------------------------------------------
-| Initialize sandbox
-|--------------------------------------------------------------------------
-*/
+ * Fetch original table data from Redis.
+ * If missing, fetch from PostgreSQL and cache it.
+ */
+const getOriginalTable = async (tableName) => {
+  const cacheKey = `sqlmela:original:v1:${tableName}`;
+  try {
+    const cached = await redis.get(cacheKey);
+    if (cached !== null) {
+      return JSON.parse(cached);
+    }
+  } catch (err) {
+    console.error("Redis read failed:", err.message);
+    // Fall back to PostgreSQL.
+  }
 
+  const result = await pool.query(
+    `SELECT * FROM ${tableName}`
+  );
+
+  const rows = result.rows;
+
+  try {
+    await redis.set(
+      cacheKey,
+      JSON.stringify(rows),
+      { EX: CACHE_TTL }
+    );
+  } catch (err) {
+    console.error("Redis write failed:", err.message);
+    // The database result is still usable.
+  }
+
+  return rows;
+};
+
+/*
+ * Initialize independent user and solution sandboxes.
+ */
 const initializeSandbox = async (req) => {
   if (
     req.session.userSandbox &&
@@ -24,31 +56,26 @@ const initializeSandbox = async (req) => {
     return;
   }
 
-  const [studentsResult, teachersResult] =
-    await Promise.all([
-      pool.query("SELECT * FROM students"),
-      pool.query("SELECT * FROM teachers"),
-    ]);
+  const [students, teachers] = await Promise.all([
+    getOriginalTable("students"),
+    getOriginalTable("teachers"),
+  ]);
 
   const baseSandbox = {
-    students: structuredClone(studentsResult.rows),
-    teachers: structuredClone(teachersResult.rows),
+    students,
+    teachers,
   };
 
-  /*
-   * User sandbox and solution sandbox must be
-   * completely independent.
-   */
-  req.session.userSandbox = structuredClone(
-    baseSandbox
-  );
+  req.session.userSandbox =
+    structuredClone(baseSandbox);
 
-  req.session.solutionSandbox = structuredClone(
-    baseSandbox
-  );
+  req.session.solutionSandbox =
+    structuredClone(baseSandbox);
 
   console.log("Sandbox initialized");
 };
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -206,41 +233,26 @@ const compareSandboxState = (
 
 export const getTableData = async (req, res) => {
   const { tableName } = req.params;
-
-  // if (!validateTableName(tableName)) {
-  //   return res.status(400).json({
-  //     success: false,
-  //     error: "Invalid table name",
-  //   });
-  //   console.log("Error : Invalid table name");
-  // }
-
   try {
     await initializeSandbox(req);
-
     const table =
       req.session.userSandbox[tableName];
-
     if (!table) {
       return res.status(404).json({
         success: false,
         error: "Table not found",
       });
-      console.log("Error : Table not found");
     }
-
     return res.json(table);
   } catch (err) {
     console.error(
       "getTableData error:",
       err
     );
-
     return res.status(500).json({
       success: false,
       error: "Failed to fetch table data",
     });
-    console.log("Error : Failed to fetch table.");
   }
 };
 
