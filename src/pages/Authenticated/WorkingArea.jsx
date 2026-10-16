@@ -1,9 +1,9 @@
 import React from "react";
 import Split from "react-split";
 import { useParams } from "react-router-dom";
-import InteractionWindow from "../components/WorkingAreaPanels/InteractionWindow";
-import ResultWindow from "../components/WorkingAreaPanels/ResultWindow";
-import TableWindow from "../components/WorkingAreaPanels/TableWindow";
+import InteractionWindow from "../../components/WorkingAreaPanels/InteractionWindow";
+import ResultWindow from "../../components/WorkingAreaPanels/ResultWindow";
+import TableWindow from "../../components/WorkingAreaPanels/TableWindow";
 // import games from "../data/games.json";
 import { useState,useEffect } from "react";
 

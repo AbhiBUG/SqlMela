@@ -1,17 +1,18 @@
 import { React, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Tables from '../components/Tabs/Database.jsx';
-import Practice from '../components/Tabs/Practice.jsx';
-import Tests from '../components/Tabs/Test.jsx';
+import Tables from './Authenticated/Tabs/Database.jsx';
+import Practice from './Authenticated/Tabs/Practice.jsx';
+import Tests from './Authenticated/Tabs/Test.jsx';
 import C from '../assets/coffee.png'
 import BugReporting from '../components/modals/BugReportModal.jsx';
 import PaymentModal from '../components/modals/PaymentModal.jsx';
+
+const DJANGO_API_URL = import.meta.env.VITE_DJANGO_API_URL;
+
 const Home = () => {
   const [value, setValue] = useState(0);
   const [reportModalStatus,changeReportModal] = useState(false);
   const [paymentModalStatus,changePaymentModal] = useState(false);
-
-
 
     try {
       console.log("Activating django server");

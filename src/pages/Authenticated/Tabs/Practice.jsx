@@ -12,7 +12,7 @@ import {
   FaCode,
 } from "react-icons/fa";
 
-import CodeViewerModal from "../CodeViewerModal";
+import CodeViewerModal from "../../../components/CodeViewerModal";
 
 
 const Practice = () => {

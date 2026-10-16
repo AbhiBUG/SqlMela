@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+
+const DJANGO_API_URL = import.meta.env.VITE_DJANGO_API_URL;
+
 const Query = ({ question,argument,solution,setScore,playButton,setValidatorResult }) => {
   const [sql, setSql] = useState("");
 

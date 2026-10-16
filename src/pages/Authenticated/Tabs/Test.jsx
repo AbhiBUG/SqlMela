@@ -1,5 +1,5 @@
 import React from 'react'
-import M from "../../assets/maintenance.png";
+import M from "../../../assets/maintenance.png";
 const Tests = () => {
   return (
    <div className="min-h-screen bg-white flex items-center justify-center px-6">

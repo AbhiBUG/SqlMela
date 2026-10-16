@@ -12,8 +12,8 @@ import BG from "./assets/bg1.png";
 import NavBar from "./components/navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/login.jsx";
-import Tables from "./pages/Tables.jsx";
-import TablePage from "./pages/WorkingArea.jsx";
+import Tables from "./pages/Authenticated/Tables.jsx";
+import TablePage from "./pages/Authenticated/WorkingArea.jsx";
 import Profile from "./pages/Profile.jsx";
 import Maintenance from "./pages/Maintenance.jsx";
 

@@ -1,8 +1,8 @@
 import React from 'react'
 import {useNavigate,Link} from 'react-router-dom'
-import DB from "../../assets/DB.png";
+// import DB from "../../assets/DB.png";
 import { AiFillDatabase } from "react-icons/ai";
-import BG from "../../assets/mela1.png";
+import BG from "../../../assets/mela1.png";
 
 const Databases = () => {
 
@@ -12,7 +12,6 @@ const Databases = [
   "Office",
   "Library",
   "Hospital"
-
 ];
 
 const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import tables from "../data/tables.json";
+import tables from "../../data/tables.json";
 
 export default function Tables() {
   const { dbName } = useParams();
