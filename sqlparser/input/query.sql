@@ -1,0 +1,1 @@
+update students set age='26' where name <> \"abhi\";
