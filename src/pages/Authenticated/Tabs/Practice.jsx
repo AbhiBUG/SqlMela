@@ -13,9 +13,10 @@ import {
 } from "react-icons/fa";
 
 import CodeViewerModal from "../../../components/CodeViewerModal";
-
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Practice = () => {
+  const { token } = useAuth();
   const [selectedQueryType, setSelectedQueryType] = useState(null);
   const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
   const [githubConnected, setGithubConnected] = useState(false);
@@ -179,10 +180,35 @@ const handleGetRepoContent = async (repo) => {
 
 
 
-  const handleGithubConnect = () => {
-    window.location.href =
-      "https://sqlmela.onrender.com/auth/github";
-  };
+  // const handleGithubConnect = () => {
+  //   window.location.href =
+  //     "https://sqlmela.onrender.com/auth/github";
+  // };
+
+
+  const handleGithubConnect = async () => {
+  try {
+    const response = await fetch(
+      "https://sqlmela.onrender.com/auth/github/start",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to start GitHub linking");
+    }
+
+    window.location.href = data.authorizationUrl;
+  } catch (error) {
+    console.error("GitHub linking error:", error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100">

@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 
 const Login = ({ setUser,setDemoUser }) => {
   const [state, setState] = useState(false);
+  const [token, setToken] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const Login = ({ setUser,setDemoUser }) => {
           navigate("/maintenance");
         }
         else{
+        setToken(data.token);
         setUser(data.user);
         navigate("/home");
         }

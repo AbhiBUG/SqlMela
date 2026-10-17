@@ -5,8 +5,59 @@ import {
   encryptToken,
   decryptToken
 } from "../utils/tokenEncryption.js";
-
+import jwt from "jsonwebtoken";
 const FRONTEND_URL = "https://sqlmelafrontend.onrender.com";
+
+
+
+
+export const startGitHubOAuth = (req, res) => {
+  try {
+    const userId = req.auth?.userId;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Please log in to SqlMela first",
+      });
+    }
+
+    const state = jwt.sign(
+      {
+        sub: String(userId),
+        purpose: "github-link",
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "5m",
+        issuer: "sqlmela",
+        audience: "github-link",
+      }
+    );
+
+    const params = new URLSearchParams({
+      client_id: process.env.GITHUB_CLIENT_ID,
+      redirect_uri:
+        "https://sqlmela.onrender.com/auth/github/callback",
+      scope: "repo read:user",
+      state,
+    });
+
+    return res.status(200).json({
+      success: true,
+      authorizationUrl:
+        `https://github.com/login/oauth/authorize?${params.toString()}`,
+    });
+  } catch (error) {
+    console.error("GitHub OAuth start error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Could not start GitHub linking",
+    });
+  }
+};
+
 
 // GitHub OAuth callback
 export const handleGitHubCallback = async (req, res) => {
@@ -14,7 +65,31 @@ export const handleGitHubCallback = async (req, res) => {
     const { profile, accessToken } = req.user || {};
     // const userId = req.session?.user?.id;
 
-    const userId = req.auth?.userId;
+    // const userId = req.auth?.userId;
+
+    
+let statePayload;
+
+try {
+  statePayload = jwt.verify(req.query.state, process.env.JWT_SECRET, {
+    issuer: "sqlmela",
+    audience: "github-link",
+  });
+} catch {
+  return res.status(401).send(
+    "Invalid or expired GitHub linking request. Please try again."
+  );
+}
+
+if (
+  statePayload.purpose !== "github-link" ||
+  !statePayload.sub
+) {
+  return res.status(401).send("Invalid GitHub linking request");
+}
+
+const userId = statePayload.sub;
+
 
     if (!userId) {
       return res.status(401).json({

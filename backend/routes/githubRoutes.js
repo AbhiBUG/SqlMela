@@ -2,13 +2,20 @@ import express from "express";
 import passport from "../config/passport.js";
 import * as GitHubController from "../controllers/githubController.js";
 import { checkLoggedIn } from "../middlewares/authMiddleware.js";
-import { checkGitHubToken } from "../middlewares/githubMiddleware.js";
 
 const router = express.Router();
 
 /**
  * GitHub OAuth Routes
  */
+
+
+router.post(
+  "/github/start",
+  checkLoggedIn,
+  GitHubController.startGitHubOAuth
+);
+
 
 // GET /auth/github - Initiate GitHub OAuth
 router.get(
