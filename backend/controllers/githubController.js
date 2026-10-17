@@ -1,334 +1,230 @@
-// import { createOrUpdateGitHubAccount, getGitHubAccountByUserId } from "../models/githubAccounts.js";
-// import * as GitHubService from "../services/githubService.js";
-
-// /**
-//  * GitHub Controller - Handles GitHub OAuth and repository operations
-//  */
-
-// export const handleGitHubCallback = async (req, res) => {
-//   try {
-//     const { profile, accessToken } = req.user;
-
-//     if (!req.session.user) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "User session not found"
-//       });
-//     }
-
-//     // Store GitHub account in database
-//     await createOrUpdateGitHubAccount(
-//       req.session.user.id,
-//       profile.username,
-//       accessToken
-//     );
-
-//     console.log(`✅ GitHub account linked for user: ${profile.username}`);
-
-//     // Redirect to practice page
-//     res.redirect("https://sqlmelafrontend.onrender.com/practice");
-//   } catch (err) {
-//     console.error("❌ Error in GitHub callback:", err.message);
-//     res.status(500).json({
-//       success: false,
-//       message: "GitHub authentication failed",
-//       error: err.message
-//     });
-//   }
-// };
-
-// export const getUserGitHubAccount = async (req, res) => {
-//   try {
-//     if (!req.session.user) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "Unauthorized"
-//       });
-//     }
-
-//     const gitHubAccount = await getGitHubAccountByUserId(req.session.user.id);
-
-//     if (!gitHubAccount) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "GitHub account not linked"
-//       });
-//     }
-
-//     res.json({
-//       success: true,
-//       account: {
-//         username: gitHubAccount.github_username,
-//         linkedAt: gitHubAccount.created_at
-//       }
-//     });
-//   } catch (err) {
-//     console.error("❌ Error fetching GitHub account:", err.message);
-//     res.status(500).json({
-//       success: false,
-//       message: "Error fetching GitHub account",
-//       error: err.message
-//     });
-//   }
-// };
-
-// export const getUserRepos = async (req, res) => {
-//   try {
-//     if (!req.session.user) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "Unauthorized"
-//       });
-//     }
-
-//     const gitHubAccount = await getGitHubAccountByUserId(req.session.user.id);
-
-//     if (!gitHubAccount) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "GitHub account not linked"
-//       });
-//     }
-
-//     const repos = await GitHubService.getGitHubUserRepos(
-//       gitHubAccount.access_token,
-//       gitHubAccount.github_username
-//     );
-
-//     res.json({
-//       success: true,
-//       repos: repos
-//     });
-//   } catch (err) {
-//     console.error("❌ Error fetching repositories:", err.message);
-//     res.status(500).json({
-//       success: false,
-//       message: "Error fetching repositories",
-//       error: err.message
-//     });
-//   }
-// };
-
-// export const getRepoContent = async (req, res) => {
-//   try {
-//     const { owner, repo, path } = req.body;
-
-//     if (!owner || !repo) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Missing owner or repo parameter"
-//       });
-//     }
-
-//     if (!req.session.user) {
-//       return res.status(401).json({
-//         success: false,
-//         message: "Unauthorized"
-//       });
-//     }
-
-//     const gitHubAccount = await getGitHubAccountByUserId(req.session.user.id);
-
-//     if (!gitHubAccount) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "GitHub account not linked"
-//       });
-//     }
-
-//     const content = await GitHubService.getGitHubRepoContent(
-//       gitHubAccount.access_token,
-//       owner,
-//       repo,
-//       path || ''
-//     );
-
-//     res.json({
-//       success: true,
-//       content: content
-//     });
-//   } catch (err) {
-//     console.error("❌ Error fetching repo content:", err.message);
-//     res.status(500).json({
-//       success: false,
-//       message: "Error fetching repository content",
-//       error: err.message
-//     });
-//   }
-// };
-
-
 
 import * as GitHubService from "../services/githubService.js";
+import pool from "../config/db.js";
+import {
+  encryptToken,
+  decryptToken
+} from "../utils/tokenEncryption.js";
 
-/**
- * GitHub Controller - Handles GitHub OAuth and repository operations
- */
+const FRONTEND_URL = "https://sqlmelafrontend.onrender.com";
 
+// GitHub OAuth callback
 export const handleGitHubCallback = async (req, res) => {
   try {
-    console.log("Insidle GitHub callback handler");
-    const { profile, accessToken } = req.user;
+    const { profile, accessToken } = req.user || {};
+    const userId = req.session?.user?.id;
 
-    if (!req.session.user) {
+    if (!userId) {
       return res.status(401).json({
         success: false,
-        message: "User session not found"
+        message: "Please log in to SqlMela before linking GitHub"
       });
     }
 
-    // Store GitHub data in session
-req.session.github = {
-  id: profile.id,
-  username: profile.username,
-  accessToken,
-  linkedAt: new Date().toISOString()
-};
+    if (!profile?.id || !profile?.username || !accessToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Incomplete GitHub authentication data"
+      });
+    }
 
-req.session.save((err) => {
-  if (err) {
-    console.error("Session save error:", err);
+    const githubId = String(profile.id);
+    const githubUsername = profile.username;
+    const encryptedToken = encryptToken(accessToken);
+
+    await pool.query(
+      `INSERT INTO github_accounts (
+         user_id,
+         github_id,
+         github_username,
+         access_token_encrypted
+       )
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (user_id)
+       DO UPDATE SET
+         github_id = EXCLUDED.github_id,
+         github_username = EXCLUDED.github_username,
+         access_token_encrypted = EXCLUDED.access_token_encrypted`,
+      [userId, githubId, githubUsername, encryptedToken]
+    );
+
+    return res.redirect(`${FRONTEND_URL}/home`);
+  } catch (err) {
+    console.error("GitHub callback error:", err.message);
+
+    if (err.code === "23505") {
+      return res.status(409).json({
+        success: false,
+        message: "This GitHub account may already be linked to another user"
+      });
+    }
 
     return res.status(500).json({
       success: false,
-      message: "Failed to save GitHub session"
-    });
-  }
-
-  res.redirect("https://sqlmelafrontend.onrender.com/home");
-});
-  } catch (err) {
-    console.error("❌ Error in GitHub callback:", err.message);
-
-    res.status(500).json({
-      success: false,
-      message: "GitHub authentication failed",
-      error: err.message
+      message: "GitHub account linking failed"
     });
   }
 };
 
+// Get linked GitHub account
 export const getUserGitHubAccount = async (req, res) => {
   try {
-    if (!req.session.user) {
+    const userId = req.session?.user?.id;
+
+    if (!userId) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized"
       });
     }
 
-    const gitHubAccount = req.session.github;
+    const result = await pool.query(
+      `SELECT github_id, github_username, linked_at
+       FROM github_accounts
+       WHERE user_id = $1`,
+      [userId]
+    );
 
-    if (!gitHubAccount) {
+    const account = result.rows[0];
+
+    if (!account) {
       return res.status(404).json({
         success: false,
         message: "GitHub account not linked"
       });
     }
 
-    res.json({
+    return res.json({
       success: true,
       account: {
-        username: gitHubAccount.username,
-        linkedAt: gitHubAccount.linkedAt
+        id: account.github_id,
+        username: account.github_username,
+        linkedAt: account.linked_at
       }
     });
   } catch (err) {
-    console.error("❌ Error fetching GitHub account:", err.message);
+    console.error("GitHub account lookup error:", err.message);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Error fetching GitHub account",
-      error: err.message
+      message: "Error fetching GitHub account"
     });
   }
 };
 
+// Get repositories
 export const getUserRepos = async (req, res) => {
-  console.log("Inside user Repos fetch");
   try {
-    if (!req.session.user) {
+    const userId = req.session?.user?.id;
+
+    if (!userId) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized"
       });
     }
 
-    const gitHubAccount = req.session.github;
+    const result = await pool.query(
+      `SELECT access_token_encrypted, github_username
+       FROM github_accounts
+       WHERE user_id = $1`,
+      [userId]
+    );
 
-    if (!gitHubAccount) {
+    const account = result.rows[0];
+
+    if (!account) {
       return res.status(404).json({
         success: false,
         message: "GitHub account not linked"
       });
     }
 
-    const repos = await GitHubService.getGitHubUserRepos(
-      gitHubAccount.accessToken,
-      gitHubAccount.username
+    const accessToken = decryptToken(
+      account.access_token_encrypted
     );
 
-    res.json({
+    const repos = await GitHubService.getGitHubUserRepos(
+      accessToken,
+      account.github_username
+    );
+
+    return res.json({
       success: true,
       repos
     });
   } catch (err) {
-    console.error("❌ Error fetching repositories:", err.message);
+    console.error("Repository fetch error:", err.message);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Error fetching repositories",
-      error: err.message
+      message: "Error fetching repositories"
     });
   }
 };
 
+// Get repository content
 export const getRepoContent = async (req, res) => {
-  console.log("Inside get Repo Content");
   try {
-    const { owner, repo, path } = req.body;
+    const { owner, repo, path = "" } = req.body;
 
-    if (!owner || !repo) {
+    if (
+      typeof owner !== "string" || !owner.trim() ||
+      typeof repo !== "string" || !repo.trim() ||
+      typeof path !== "string"
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Missing owner or repo parameter"
+        message: "Invalid owner, repo, or path"
       });
     }
 
-    if (!req.session.user) {
+    const userId = req.session?.user?.id;
+
+    if (!userId) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized"
       });
     }
 
-    const gitHubAccount = req.session.github;
+    const result = await pool.query(
+      `SELECT access_token_encrypted
+       FROM github_accounts
+       WHERE user_id = $1`,
+      [userId]
+    );
 
-    if (!gitHubAccount) {
+    const account = result.rows[0];
+
+    if (!account) {
       return res.status(404).json({
         success: false,
         message: "GitHub account not linked"
       });
     }
 
-    const content = await GitHubService.getGitHubRepoContent(
-      gitHubAccount.accessToken,
-      owner,
-      repo,
-      path || ""
+    const accessToken = decryptToken(
+      account.access_token_encrypted
     );
 
-    res.json({
+    const content = await GitHubService.getGitHubRepoContent(
+      accessToken,
+      owner.trim(),
+      repo.trim(),
+      path
+    );
+
+    return res.json({
       success: true,
       content
     });
   } catch (err) {
-    console.error("❌ Error fetching repo content:", err.message);
+    console.error("Repository content error:", err.message);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Error fetching repository content",
-      error: err.message
+      message: "Error fetching repository content"
     });
   }
 };
