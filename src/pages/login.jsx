@@ -3,10 +3,12 @@ import { LuEye, LuEyeClosed } from "react-icons/lu";
 import DB from "../assets/DB.png";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = ({ setUser,setDemoUser }) => {
+    const { login } = useAuth();
   const [state, setState] = useState(false);
-  const [token, setToken] = useState(null);
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -40,9 +42,9 @@ const Login = ({ setUser,setDemoUser }) => {
           navigate("/maintenance");
         }
         else{
-        setToken(data.token);
-        setUser(data.user);
-        navigate("/home");
+   login(data.user, data.token);
+setUser(data.user);
+navigate("/home");
         }
       } else {  
            setIsModalOpen(true);
