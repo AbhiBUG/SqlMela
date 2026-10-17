@@ -12,7 +12,9 @@ const FRONTEND_URL = "https://sqlmelafrontend.onrender.com";
 export const handleGitHubCallback = async (req, res) => {
   try {
     const { profile, accessToken } = req.user || {};
-    const userId = req.session?.user?.id;
+    // const userId = req.session?.user?.id;
+
+    const userId = req.auth?.userId;
 
     if (!userId) {
       return res.status(401).json({
@@ -69,7 +71,9 @@ export const handleGitHubCallback = async (req, res) => {
 // Get linked GitHub account
 export const getUserGitHubAccount = async (req, res) => {
   try {
-    const userId = req.session?.user?.id;
+    // const userId = req.session?.user?.id;
+
+    const userId = req.auth?.userId;
 
     if (!userId) {
       return res.status(401).json({
@@ -115,7 +119,9 @@ export const getUserGitHubAccount = async (req, res) => {
 // Get repositories
 export const getUserRepos = async (req, res) => {
   try {
-    const userId = req.session?.user?.id;
+    // const userId = req.session?.user?.id;
+
+    const userId = req.auth?.userId;
 
     if (!userId) {
       return res.status(401).json({
@@ -179,8 +185,9 @@ export const getRepoContent = async (req, res) => {
       });
     }
 
-    const userId = req.session?.user?.id;
+    // const userId = req.session?.user?.id;
 
+    const userId = req.auth?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
