@@ -4,75 +4,85 @@ import { validateUserCredentials, getUserByUsernameModel, updateUser } from "../
  * Auth Controller - Handles authentication-related operations
  */
 
-export const login = (req, res) => {
-  const { username, password } = req.body;
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import pool from "../config/db.js";
 
-  console.log("📝 Login request:", { username });
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
 
-  if (!username || !password) {
-    console.warn("⚠️  Missing credentials in request");
-    return res.status(400).json({
-      success: false,
-      message: "Missing credentials"
-    });
-  }
+    console.log("Login request:", { username });
 
-  const user = validateUserCredentials(username, password);
+    if (
+      !username ||
+      typeof username !== "string" ||
+      !password ||
+      typeof password !== "string"
+    ) {
+      console.warn("Missing credentials in request");
 
-  if (!user) {
-    console.warn(`❌ Invalid login attempt for username: ${username}`);
-    return res.status(401).json({
-      success: false,
-      message: "Invalid credentials"
-    });
-  }
-
-  // Store user in session
-  req.session.user = {
-    id: user.id,
-    username: user.username,
-    fullname: user.name,
-    role: user.role
-  };
-
-  req.session.save((err) => {
-    if (err) {
-      console.error("❌ Session save error:", err);
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
-        message: "Session error"
+        message: "Missing credentials"
       });
     }
 
-    console.log(`✅ Login successful for user: ${username}`);
+    // Fetch user from PostgreSQL
+    const result = await pool.query(
+      `SELECT id, username, email, password_hash
+       FROM users
+       WHERE username = $1`,
+      [username.trim()]
+    );
 
-    // Check maintenance mode
-    const isMaintenance = process.env.MAINTENANCE_MODE === 'true';
-    if (isMaintenance && user.role !== "developer") {
-      return res.json({
-        success: true,
-        maintenance: true,
-        message: "Site Under Maintenance"
+    const user = result.rows[0];
+
+    // Validate password against the stored bcrypt hash
+    if (
+      !user ||
+      !(await bcrypt.compare(password, user.password_hash))
+    ) {
+      console.warn(`Invalid login attempt for username: ${username}`);
+
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials"
       });
     }
 
-    return res.json({
+    // Generate JWT after successful authentication
+    const token = jwt.sign(
+      { sub: String(user.id) },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    return res.status(200).json({
       success: true,
       message: "Login successful",
+      token,
       user: {
         id: user.id,
         username: user.username,
-        fullname: user.name,
-        role: user.role
+        email: user.email
       }
     });
-  });
+
+  } catch (error) {
+    console.error("Login error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
 };
 
 export const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      console.error("❌ Logout error:", err);
+      console.error(" Logout error:", err);
       return res.status(500).json({
         success: false,
         message: "Logout failed"
