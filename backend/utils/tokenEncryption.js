@@ -1,4 +1,3 @@
-```javascript
 import crypto from "node:crypto";
 
 const keyHex = process.env.GITHUB_TOKEN_ENCRYPTION_KEY || "";
@@ -73,4 +72,3 @@ export const decryptToken = (storedValue) => {
 
   return decrypted.toString("utf8");
 };
-```
