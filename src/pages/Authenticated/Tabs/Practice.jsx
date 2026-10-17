@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 
 import CodeViewerModal from "../../../components/CodeViewerModal";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 const Practice = () => {
   const { token } = useAuth();
